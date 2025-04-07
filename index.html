@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Рецепты</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .ingredient {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .ingredient input[type="text"] {
+      margin-right: 10px;
+      padding: 5px;
+      flex: 1;
+    }
+    .ingredient select {
+      margin-right: 10px;
+      padding: 5px;
+    }
+    .ingredient .remove-ingredient {
+      cursor: pointer;
+      color: red;
+      border: none;
+      background: none;
+      font-size: 16px;
+    }
+    .ingredient.optional {
+      font-style: italic;
+      color: #666;
+    }
+    .ingredient.interchangeable {
+      text-decoration: underline;
+      color: #007BFF;
+    }
+    .recipe {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .recipe h3 {
+      margin-top: 0;
+    }
+    .edit-button, .cancel-edit-button {
+      margin-right: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Рецепты</h1>
+
+  <section id="recipeFormSection">
+    <h2 id="formTitle">Добавить рецепт</h2>
+    <form id="recipeForm">
+      <div>
+        <label for="recipeTitle">Название рецепта:</label><br>
+        <input type="text" id="recipeTitle" name="recipeTitle" required>
+      </div>
+      <div id="ingredientsContainer">
+        <h3>Ингредиенты</h3>
+        <div id="ingredientsList"></div>
+        <button type="button" id="addIngredientBtn">Добавить ингредиент</button>
+      </div>
+      <div>
+        <label for="instructions">Инструкция:</label><br>
+        <textarea id="instructions" name="instructions" rows="5" cols="50" required></textarea>
+      </div>
+      <div>
+        <button type="submit" id="submitBtn">Сохранить рецепт</button>
+        <button type="button" id="cancelEditBtn" style="display:none;">Отмена редактирования</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="recipesSection">
+    <h2>Сохраненные рецепты</h2>
+    <div id="recipesList"></div>
+  </section>
+
+  <script>
+    let editingIndex = null; // Переменная для хранения индекса редактируемого рецепта
+
+    // Функция для создания новой строки ингредиента
+    function createIngredientRow(name = '', status = 'required') {
+      const div = document.createElement('div');
+      div.classList.add('ingredient');
+      if (status === 'optional') {
+        div.classList.add('optional');
+      } else if (status === 'interchangeable') {
+        div.classList.add('interchangeable');
+      }
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Название ингредиента';
+      input.value = name;
+      input.required = true;
+      
+      const select = document.createElement('select');
+      const options = [
+        { value: 'required', text: 'Обязательный' },
+        { value: 'optional', text: 'Опциональный' },
+        { value: 'interchangeable', text: 'Взаимозаменяемый' }
+      ];
+      options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.textContent = opt.text;
+        if (opt.value === status) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+      
+      // При смене статуса обновляем класс для наглядного отображения
+      select.addEventListener('change', function() {
+        div.classList.remove('optional', 'interchangeable');
+        if (select.value === 'optional') {
+          div.classList.add('optional');
+        } else if (select.value === 'interchangeable') {
+          div.classList.add('interchangeable');
+        }
+      });
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.textContent = 'Удалить';
+      removeBtn.classList.add('remove-ingredient');
+      removeBtn.addEventListener('click', function() {
+        div.remove();
+      });
+      
+      div.appendChild(input);
+      div.appendChild(select);
+      div.appendChild(removeBtn);
+      
+      return div;
+    }
+    
+    // Добавляем первую строку ингредиента при загрузке страницы
+    const ingredientsList = document.getElementById('ingredientsList');
+    ingredientsList.appendChild(createIngredientRow());
+    
+    // Обработчик кнопки "Добавить ингредиент"
+    document.getElementById('addIngredientBtn').addEventListener('click', function() {
+      ingredientsList.appendChild(createIngredientRow());
+    });
+    
+    // Функция для получения рецептов из localStorage
+    function loadRecipes() {
+      const recipes = localStorage.getItem('recipes');
+      return recipes ? JSON.parse(recipes) : [];
+    }
+    
+    // Функция для сохранения рецептов в localStorage
+    function saveRecipes(recipes) {
+      localStorage.setItem('recipes', JSON.stringify(recipes));
+    }
+    
+    // Функция для отображения списка сохраненных рецептов
+    function renderRecipes() {
+      const recipesList = document.getElementById('recipesList');
+      recipesList.innerHTML = '';
+      const recipes = loadRecipes();
+      recipes.forEach((recipe, index) => {
+        const div = document.createElement('div');
+        div.classList.add('recipe');
+        
+        const title = document.createElement('h3');
+        title.textContent = recipe.title;
+        div.appendChild(title);
+        
+        const ingList = document.createElement('ul');
+        recipe.ingredients.forEach(ing => {
+          const li = document.createElement('li');
+          li.textContent = ing.name + ' (' + (ing.status === 'required' ? 'Обязательный' : (ing.status === 'optional' ? 'Опциональный' : 'Взаимозаменяемый')) + ')';
+          ingList.appendChild(li);
+        });
+        div.appendChild(ingList);
+        
+        const instr = document.createElement('p');
+        instr.textContent = recipe.instructions;
+        div.appendChild(instr);
+        
+        // Кнопка для редактирования рецепта
+        const editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.textContent = 'Редактировать';
+        editBtn.classList.add('edit-button');
+        editBtn.addEventListener('click', function() {
+          editRecipe(index);
+        });
+        div.appendChild(editBtn);
+        
+        recipesList.appendChild(div);
+      });
+    }
+    
+    // Функция для загрузки рецепта в форму редактирования
+    function editRecipe(index) {
+      const recipes = loadRecipes();
+      const recipe = recipes[index];
+      
+      document.getElementById('recipeTitle').value = recipe.title;
+      document.getElementById('instructions').value = recipe.instructions;
+      
+      // Очищаем список ингредиентов и заполняем его ингредиентами выбранного рецепта
+      ingredientsList.innerHTML = '';
+      recipe.ingredients.forEach(ing => {
+        ingredientsList.appendChild(createIngredientRow(ing.name, ing.status));
+      });
+      
+      editingIndex = index;
+      
+      // Меняем заголовок и текст кнопки формы
+      document.getElementById('formTitle').textContent = 'Редактировать рецепт';
+      document.getElementById('submitBtn').textContent = 'Обновить рецепт';
+      document.getElementById('cancelEditBtn').style.display = 'inline-block';
+      
+      // Прокручиваем страницу к форме
+      window.scrollTo(0, 0);
+    }
+    
+    // Обработчик кнопки отмены редактирования
+    document.getElementById('cancelEditBtn').addEventListener('click', function() {
+      editingIndex = null;
+      document.getElementById('recipeForm').reset();
+      ingredientsList.innerHTML = '';
+      ingredientsList.appendChild(createIngredientRow());
+      document.getElementById('formTitle').textContent = 'Добавить рецепт';
+      document.getElementById('submitBtn').textContent = 'Сохранить рецепт';
+      document.getElementById('cancelEditBtn').style.display = 'none';
+    });
+    
+    // Обработчик отправки формы – добавление нового рецепта или обновление существующего
+    document.getElementById('recipeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('recipeTitle').value.trim();
+      const instructions = document.getElementById('instructions').value.trim();
+      
+      // Собираем данные по ингредиентам
+      const ingredientDivs = document.querySelectorAll('#ingredientsList .ingredient');
+      const ingredients = [];
+      ingredientDivs.forEach(div => {
+        const name = div.querySelector('input[type="text"]').value.trim();
+        const status = div.querySelector('select').value;
+        if (name !== '') {
+          ingredients.push({ name, status });
+        }
+      });
+      
+      if (title === '' || instructions === '' || ingredients.length === 0) {
+        alert('Пожалуйста, заполните все поля и добавьте хотя бы один ингредиент.');
+        return;
+      }
+      
+      const recipes = loadRecipes();
+      
+      if (editingIndex !== null) {
+        // Обновление существующего рецепта
+        recipes[editingIndex] = { title, ingredients, instructions };
+        editingIndex = null;
+      } else {
+        // Сохранение нового рецепта
+        recipes.push({ title, ingredients, instructions });
+      }
+      
+      saveRecipes(recipes);
+      
+      // Сброс формы
+      document.getElementById('recipeForm').reset();
+      ingredientsList.innerHTML = '';
+      ingredientsList.appendChild(createIngredientRow());
+      document.getElementById('formTitle').textContent = 'Добавить рецепт';
+      document.getElementById('submitBtn').textContent = 'Сохранить рецепт';
+      document.getElementById('cancelEditBtn').style.display = 'none';
+      
+      renderRecipes();
+    });
+    
+    // Отображаем рецепты при загрузке страницы
+    renderRecipes();
+  </script>
+</body>
+</html>
