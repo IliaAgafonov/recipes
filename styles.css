@@ -1,11 +1,10 @@
 /* Import a lightweight CSS library: Skeleton */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css');
 
-/* Custom CSS overrides and additional styling */
-
-/* Base styling overrides */
+/* Base styling overrides for dark theme */
 body {
-  background-color: #f7f7f7;
+  background-color: #121212;
+  color: #e0e0e0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   padding: 20px;
   margin: 0 auto;
@@ -14,16 +13,16 @@ body {
 
 /* Headings */
 h1, h2 {
-  color: #333;
+  color: #f5f5f5;
   margin-top: 20px;
 }
 
 /* Recipe Form Section */
 #recipeFormSection {
-  background: #fff;
+  background: #1e1e1e;
   padding: 20px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   margin-bottom: 30px;
 }
 
@@ -37,15 +36,24 @@ h1, h2 {
 .ingredient input[type="text"] {
   flex: 1;
   margin-right: 10px;
+  background: #2c2c2c;
+  border: 1px solid #444;
+  color: #e0e0e0;
+  padding: 8px;
 }
 
 .ingredient select {
   margin-right: 10px;
+  background: #2c2c2c;
+  border: 1px solid #444;
+  color: #e0e0e0;
+  padding: 8px;
 }
 
 .ingredient .remove-ingredient {
   border: none;
   background: transparent;
+  font-size: 16px;
   color: #e74c3c;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -58,32 +66,34 @@ h1, h2 {
 /* Ingredient status specific styles */
 .ingredient.optional {
   font-style: italic;
-  color: #7f8c8d;
+  color: #bdc3c7;
 }
 
 .ingredient.interchangeable {
   text-decoration: underline;
-  color: #2980b9;
+  color: #3498db;
 }
 
 /* Recipe list styling */
 .recipe {
-  background: #fff;
+  background: #1e1e1e;
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
 }
 
 .recipe h3 {
   display: inline-block;
   margin: 0;
   font-size: 1.5em;
+  color: #f5f5f5;
 }
 
 /* Recipe status label colors */
 .status-tasty {
-  background-color: #27ae60;
+  background-color: #2ecc71;
   color: #fff;
   padding: 3px 8px;
   margin-left: 10px;
@@ -114,6 +124,7 @@ h1, h2 {
   list-style-type: disc;
   margin: 10px 0 10px 20px;
   padding: 0;
+  color: #e0e0e0;
 }
 
 /* Recipe instructions with preserved line breaks */
@@ -122,6 +133,7 @@ h1, h2 {
   margin-top: 10px;
   font-size: 1em;
   line-height: 1.5;
+  color: #e0e0e0;
 }
 
 /* Buttons styling */
@@ -129,6 +141,7 @@ button {
   background: #3498db;
   border: none;
   color: #fff;
+  padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -144,6 +157,15 @@ button:hover {
 
 #cancelEditBtn:hover {
   background: #c0392b;
+}
+
+/* Form input and textarea dark styles */
+input[type="text"],
+textarea,
+select {
+  background: #2c2c2c;
+  border: 1px solid #444;
+  color: #e0e0e0;
 }
 
 /* Smooth transitions for interactive elements */
