@@ -158,10 +158,10 @@
             ingList.classList.add('one-half');
             ingList.classList.add('column');
             recipe.ingredients.forEach(ing => {
-            const mapping = ingStatusMapping[ing.status] || {};
-            const li = $('li');
-            li.textContent = ing.name + ' (' + (mapping.text || ing.status) + ')';
-            ingList.appendChild(li);
+                const mapping = ingStatusMapping[ing.status] || {};
+                const li = $('li');
+                li.textContent = ing.name + ' (' + (mapping.text || ing.status) + ')';
+                ingList.appendChild(li);
             });
             row.appendChild(ingList);
             

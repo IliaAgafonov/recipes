@@ -250,27 +250,6 @@ button:hover {
   text-decoration: none;
 }
 
-/* Export/Import Trigger Buttons */
-#exportBtn,
-#importBtnShow {
-  margin: 10px 5px;
-  background: var(--button-bg);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  padding: 8px 12px;
-  font-size: 1rem;
-  text-decoration: none;
-  line-height: 1.2;
-}
-
-#exportBtn:hover,
-#importBtnShow:hover {
-  background: var(--button-hover-bg);
-}
-
 /* Form Elements */
 input[type="text"],
 textarea,
