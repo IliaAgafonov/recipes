@@ -32,13 +32,15 @@ body {
   padding: 20px;
   margin: 0 auto;
   max-width: 800px;
-  line-height: 1.6;
 }
 
 /* Headings */
 h1, h2 {
   color: var(--heading-color);
-  margin-top: 1.5rem;
+}
+
+#topButtons {
+  margin-bottom: 1rem;
 }
 
 /* Recipe Form Section */
@@ -48,6 +50,14 @@ h1, h2 {
   border-radius: 4px;
   box-shadow: 0 2px 4px var(--modal-shadow);
   margin-bottom: 30px;
+}
+
+#recipeForm {
+  margin: 0;
+}
+
+#recipeForm label {
+  font-size: 2rem;
 }
 
 /* Ingredients Section */
@@ -109,18 +119,17 @@ h1, h2 {
 .recipe h3 {
   display: inline-block;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: var(--heading-color);
 }
 
 /* Status Labels */
 .status-tasty {
-  background-color: #2ecc71;
+  background-color: #088e41;
   color: #fff;
   padding: 3px 8px;
   margin-left: 10px;
   border-radius: 3px;
-  font-size: 0.9rem;
 }
 
 .status-not-so-good {
@@ -129,7 +138,6 @@ h1, h2 {
   padding: 3px 8px;
   margin-left: 10px;
   border-radius: 3px;
-  font-size: 0.9rem;
 }
 
 .status-not-tried {
@@ -138,7 +146,6 @@ h1, h2 {
   padding: 3px 8px;
   margin-left: 10px;
   border-radius: 3px;
-  font-size: 0.9rem;
 }
 
 /* Edit Button (within recipes) */
@@ -183,7 +190,7 @@ button {
   transition: background 0.3s ease;
   border: none;
   padding: 8px 12px;
-  font-size: 1rem;
+  font-size: 1.5rem;
   text-decoration: none;
   line-height: 1.2;
 }
@@ -273,7 +280,6 @@ select {
   color: var(--text-color);
   padding: 8px;
   border-radius: 4px;
-  font-size: 1rem;
 }
 
 textarea {

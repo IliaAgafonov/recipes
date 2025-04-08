@@ -56,7 +56,7 @@
         
         const removeBtn = $('button');
         removeBtn.type = 'button';
-        removeBtn.textContent = 'Удалить';
+        removeBtn.textContent = '✕';
         removeBtn.classList.add('remove-ingredient');
         removeBtn.addEventListener('click', function() {
             div.remove();
@@ -112,13 +112,13 @@
             div.classList.add('recipe');
             
             if (recipe.status) {
-            const mapping = statusMapping[recipe.status] || {};
-            const statusSpan = $('span');
-            statusSpan.textContent = mapping.text || recipe.status;
-            if (mapping.class) {
-                statusSpan.classList.add(mapping.class);
-            }
-            div.appendChild(statusSpan);
+                const mapping = statusMapping[recipe.status] || {};
+                const statusSpan = $('span');
+                statusSpan.textContent = mapping.text || recipe.status;
+                if (mapping.class) {
+                    statusSpan.classList.add(mapping.class);
+                }
+                div.appendChild(statusSpan);
             }
             
             const title = $('h3');
@@ -126,21 +126,20 @@
             title.style = "margin: 0 10px";
             div.appendChild(title);
             
-            const editBtn = $('button');
-            editBtn.type = 'button';
-            editBtn.textContent = 'Редактировать';
-            editBtn.classList.add('edit-button');
-            editBtn.classList.add('pull-right');
-            editBtn.addEventListener('click', function() {
-            editRecipe(index);
-            });
-            div.appendChild(editBtn);
-
             const nbsp = $('span');
             nbsp.classList.add('u-cf');
             nbsp.innerHTML = '&nbsp;';
             div.appendChild(nbsp);
-            
+
+            const editBtn = $('button');
+            editBtn.type = 'button';
+            editBtn.textContent = '✎';
+            editBtn.classList.add('edit-button');
+            editBtn.addEventListener('click', function() {
+                editRecipe(index);
+            });
+            div.appendChild(editBtn);
+
             const row = $('div');
             row.classList.add('row');
 
