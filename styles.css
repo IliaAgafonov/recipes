@@ -167,10 +167,9 @@ h1, h2 {
 }
 
 /* Recipe Instructions */
-.instructions {
+.recipe .instructions {
   white-space: pre-wrap;
   margin-top: 10px;
-  font-size: 1rem;
   line-height: 1.5;
   color: var(--text-color);
 }
@@ -184,6 +183,9 @@ button {
   transition: background 0.3s ease;
   border: none;
   padding: 8px 12px;
+  font-size: 1rem;
+  text-decoration: none;
+  line-height: 1.2;
 }
 
 button:hover {
@@ -252,6 +254,9 @@ button:hover {
   cursor: pointer;
   transition: background 0.3s ease;
   padding: 8px 12px;
+  font-size: 1rem;
+  text-decoration: none;
+  line-height: 1.2;
 }
 
 #exportBtn:hover,
@@ -268,10 +273,36 @@ select {
   color: var(--text-color);
   padding: 8px;
   border-radius: 4px;
+  font-size: 1rem;
 }
 
 textarea {
   width: 100%;
   min-height: 150px;
   resize: vertical;
+}
+
+/* 
+   ----- FIX: Override Skeleton's button classes -----
+   This ensures consistency, even if Skeleton applies 
+   .button or .button-primary to your elements.
+*/
+.button,
+.button-primary {
+  background-color: var(--button-bg) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  color: #fff !important;
+  padding: 8px 12px !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  font-size: 1rem !important;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  line-height: 1.2 !important;
+}
+
+.button:hover,
+.button-primary:hover {
+  background-color: var(--button-hover-bg) !important;
 }
