@@ -40,9 +40,9 @@
     </form>
   </section>
 
-  <section id="recipesSection" class="container">
+  <section id="recipesSection">
     <h2>Сохраненные рецепты</h2>
-    <div id="recipesList" class="row"></div>
+    <div id="recipesList"></div>
   </section>
 
   <script>
@@ -157,8 +157,6 @@
       recipes.forEach((recipe, index) => {
         const div = $('div');
         div.classList.add('recipe');
-        div.classList.add('one-half');
-        div.classList.add('column');
         
         if (recipe.status) {
           const mapping = statusMapping[recipe.status] || {};
@@ -169,6 +167,15 @@
           }
           div.appendChild(statusSpan);
         }
+        
+        const editBtn = $('button');
+        editBtn.type = 'button';
+        editBtn.textContent = 'Редактировать';
+        editBtn.classList.add('edit-button');
+        editBtn.addEventListener('click', function() {
+          editRecipe(index);
+        });
+        div.appendChild(editBtn);
         
         const title = $('h3');
         title.textContent = recipe.title;
@@ -187,15 +194,6 @@
         instr.classList.add('instructions');
         instr.textContent = recipe.instructions;
         div.appendChild(instr);
-        
-        const editBtn = $('button');
-        editBtn.type = 'button';
-        editBtn.textContent = 'Редактировать';
-        editBtn.classList.add('edit-button');
-        editBtn.addEventListener('click', function() {
-          editRecipe(index);
-        });
-        div.appendChild(editBtn);
         
         recipesList.appendChild(div);
       });
