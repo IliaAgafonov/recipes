@@ -134,11 +134,22 @@
             const editBtn = $('button');
             editBtn.type = 'button';
             editBtn.textContent = '✎';
+            editBtn.title = 'Edit recipe';
             editBtn.classList.add('edit-button');
             editBtn.addEventListener('click', function() {
                 editRecipe(index);
             });
             div.appendChild(editBtn);
+
+            const removeBtn = $('button');
+            removeBtn.type = 'button';
+            removeBtn.textContent = '✕';
+            removeBtn.title = 'Remove recipe';
+            removeBtn.classList.add('remove-button');
+            removeBtn.addEventListener('click', function() {
+                removeRecipe(index);
+            });
+            div.appendChild(removeBtn);
 
             const row = $('div');
             row.classList.add('row');
@@ -165,6 +176,25 @@
             recipesList.appendChild(div);
         });
     }
+
+    function removeRecipe(index) {
+        // Retrieve the current recipes array from localStorage
+        const recipes = loadRecipes();
+        
+        // Check if the index is valid
+        if (index >= 0 && index < recipes.length) {
+            // Remove the recipe at the specified index from the array
+            recipes.splice(index, 1);
+        
+            // Save the updated recipes array back to localStorage
+            saveRecipes(recipes);
+        
+            // Re-render the recipes list to update the DOM
+            renderRecipes();
+        } else {
+            console.error('Invalid recipe index:', index);
+        }
+    }      
     
     // Функция для загрузки рецепта в форму редактирования
     function editRecipe(index) {
