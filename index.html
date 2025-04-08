@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Рецепты</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 </head>
 <body>
   <h1>Рецепты</h1>
@@ -44,6 +45,30 @@
     <h2>Сохраненные рецепты</h2>
     <div id="recipesList"></div>
   </section>
+
+  <!-- Export Modal -->
+  <div id="exportModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" id="closeExportModal">&times;</span>
+      <h2>Export Recipes</h2>
+      <textarea id="exportText" readonly style="width:100%; height:150px;"></textarea>
+      <button id="copyExport">Copy to clipboard</button>
+    </div>
+  </div>
+
+  <!-- Import Modal -->
+  <div id="importModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" id="closeImportModal">&times;</span>
+      <h2>Import Recipes</h2>
+      <textarea id="importText" placeholder="Paste your exported recipes here" style="width:100%; height:150px;"></textarea>
+      <button id="importBtn">Import Recipes</button>
+    </div>
+  </div>
+
+  <!-- Buttons to trigger modals -->
+  <button id="exportBtn">Export Recipes</button>
+  <button id="importBtnShow">Import Recipes</button>
 
   <script>
     // JQuery 4o-mini
@@ -286,6 +311,96 @@
       $('#cancelEditBtn').style.display = 'none';
       
       renderRecipes();
+    });
+
+    // Get modal elements using the helper function $
+    const exportModal = $('#exportModal');
+    const importModal = $('#importModal');
+
+    const exportBtn = $('#exportBtn');
+    const importBtnShow = $('#importBtnShow');
+
+    const closeExportModal = $('#closeExportModal');
+    const closeImportModal = $('#closeImportModal');
+
+    const exportText = $('#exportText');
+    const copyExport = $('#copyExport');
+
+    const importText = $('#importText');
+    const importBtn = $('#importBtn');
+
+    // Helper functions to open/close modals
+    function openModal(modal) {
+      modal.style.display = "block";
+    }
+    function closeModal(modal) {
+      modal.style.display = "none";
+    }
+
+    // When "Export Recipes" is clicked: compress and show recipes in exportText
+    exportBtn.addEventListener('click', function() {
+      const recipes = loadRecipes();
+      const jsonStr = JSON.stringify(recipes);
+      // Compress the JSON string into a compact encoded string
+      const compressed = LZString.compressToEncodedURIComponent(jsonStr);
+      exportText.value = compressed;
+      openModal(exportModal);
+    });
+
+    // "Copy to clipboard" functionality for the export modal
+    copyExport.addEventListener('click', function() {
+      exportText.select();
+      document.execCommand("copy");
+      copyExport.textContent = "Copied!";
+      setTimeout(() => {
+        copyExport.textContent = "Copy to clipboard";
+      }, 2000);
+    });
+
+    // When "Import Recipes" trigger is clicked, clear textarea and show import modal
+    importBtnShow.addEventListener('click', function() {
+      importText.value = "";
+      openModal(importModal);
+    });
+
+    // Close modal when clicking on the close button
+    closeExportModal.addEventListener('click', function() {
+      closeModal(exportModal);
+    });
+    closeImportModal.addEventListener('click', function() {
+      closeModal(importModal);
+    });
+
+    // Close modals when clicking outside modal-content
+    window.addEventListener('click', function(event) {
+      if (event.target === exportModal) {
+        closeModal(exportModal);
+      } else if (event.target === importModal) {
+        closeModal(importModal);
+      }
+    });
+
+    // Handle the import process when "Import Recipes" button in modal is clicked
+    importBtn.addEventListener('click', function() {
+      const compressed = importText.value.trim();
+      if (!compressed) {
+        alert("Please paste the exported recipes string.");
+        return;
+      }
+      const decompressed = LZString.decompressFromEncodedURIComponent(compressed);
+      if (!decompressed) {
+        alert("Failed to decompress recipes. Please check your input.");
+        return;
+      }
+      try {
+        const recipes = JSON.parse(decompressed);
+        saveRecipes(recipes);
+        renderRecipes();
+        closeModal(importModal);
+        alert("Recipes imported successfully!");
+      } catch (e) {
+        alert("Error parsing recipes data.");
+      }
     });
     
     // Первоначальное отображение рецептов
