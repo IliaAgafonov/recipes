@@ -9,7 +9,7 @@
           return document.createElement(el);
         }
     }
-  
+
     let editingIndex = null; // Хранит индекс редактируемого рецепта
 
     // Функция для создания новой строки ингредиента
@@ -21,13 +21,13 @@
         } else if (status === 'interchangeable') {
             div.classList.add('interchangeable');
         }
-        
+
         const input = $('input');
         input.type = 'text';
         input.placeholder = 'Название ингредиента';
         input.value = name;
         input.required = true;
-        
+
         const select = $('select');
         const options = [
             { value: 'required', text: 'Обязательный' },
@@ -43,7 +43,7 @@
             }
             select.appendChild(option);
         });
-        
+
         // При смене статуса обновляем класс для визуального отображения
         select.addEventListener('change', function() {
             div.classList.remove('optional', 'interchangeable');
@@ -53,7 +53,7 @@
             div.classList.add('interchangeable');
             }
         });
-        
+
         const removeBtn = $('button');
         removeBtn.type = 'button';
         removeBtn.textContent = '✕';
@@ -61,40 +61,40 @@
         removeBtn.addEventListener('click', function() {
             div.remove();
         });
-        
+
         div.appendChild(input);
         div.appendChild(select);
         div.appendChild(removeBtn);
-        
+
         return div;
     }
-    
+
     // Добавляем первую строку ингредиента при загрузке
     const ingredientsList = $('#ingredientsList');
     ingredientsList.appendChild(createIngredientRow());
-    
+
     // Обработчик кнопки "Добавить ингредиент"
     $('#addIngredientBtn').addEventListener('click', function() {
         ingredientsList.appendChild(createIngredientRow());
     });
-    
+
     // Функция для получения рецептов из localStorage
     function loadRecipes() {
         const recipes = localStorage.getItem('recipes');
         return recipes ? JSON.parse(recipes) : [];
     }
-    
+
     // Функция для сохранения рецептов в localStorage
     function saveRecipes(recipes) {
         localStorage.setItem('recipes', JSON.stringify(recipes));
     }
-    
+
     // Функция для отображения сохраненных рецептов
     function renderRecipes() {
         const recipesList = $('#recipesList');
         recipesList.innerHTML = '';
         const recipes = loadRecipes();
-        
+
         // Маппинг для статуса рецепта: текст и класс для оформления
         const statusMapping = {
             'tasty': { text: 'Вкусно', class: 'status-tasty' },
@@ -106,11 +106,11 @@
             'optional': { text: 'Опциональный' },
             'interchangeable': { text: 'Взаимозаменяемый' }
         };
-        
+
         recipes.forEach((recipe, index) => {
             const div = $('div');
             div.classList.add('recipe');
-            
+
             if (recipe.status) {
                 const mapping = statusMapping[recipe.status] || {};
                 const statusSpan = $('span');
@@ -120,16 +120,11 @@
                 }
                 div.appendChild(statusSpan);
             }
-            
+
             const title = $('h3');
             title.textContent = recipe.title;
             title.style = "margin: 0 10px";
             div.appendChild(title);
-            
-            const nbsp = $('span');
-            nbsp.classList.add('u-cf');
-            nbsp.innerHTML = '&nbsp;';
-            div.appendChild(nbsp);
 
             const editBtn = $('button');
             editBtn.type = 'button';
@@ -151,6 +146,11 @@
             });
             div.appendChild(removeBtn);
 
+            const nbsp = $('span');
+            nbsp.classList.add('u-cf');
+            nbsp.innerHTML = '&nbsp;';
+            div.appendChild(nbsp);
+
             const row = $('div');
             row.classList.add('row');
 
@@ -164,7 +164,7 @@
                 ingList.appendChild(li);
             });
             row.appendChild(ingList);
-            
+
             const instr = $('div');
             instr.classList.add('instructions');
             instr.classList.add('one-half');
@@ -172,55 +172,52 @@
             instr.textContent = recipe.instructions;
             row.appendChild(instr);
             div.appendChild(row)
-            
+
             recipesList.appendChild(div);
         });
     }
 
     function removeRecipe(index) {
-        // Retrieve the current recipes array from localStorage
         const recipes = loadRecipes();
-        
-        // Check if the index is valid
+        // ask confirmation
+        if (!confirm('Вы уверены, что хотите удалить этот рецепт?')) {
+            return;
+        }
+
         if (index >= 0 && index < recipes.length) {
-            // Remove the recipe at the specified index from the array
             recipes.splice(index, 1);
-        
-            // Save the updated recipes array back to localStorage
             saveRecipes(recipes);
-        
-            // Re-render the recipes list to update the DOM
             renderRecipes();
         } else {
             console.error('Invalid recipe index:', index);
         }
-    }      
-    
+    }
+
     // Функция для загрузки рецепта в форму редактирования
     function editRecipe(index) {
         const recipes = loadRecipes();
         const recipe = recipes[index];
-        
+
         $('#recipeTitle').value = recipe.title;
         $('#instructions').value = recipe.instructions;
         $('#recipeStatus').value = recipe.status || 'tasty';
-        
+
         // Очищаем список ингредиентов и загружаем ингредиенты рецепта
         ingredientsList.innerHTML = '';
         recipe.ingredients.forEach(ing => {
             ingredientsList.appendChild(createIngredientRow(ing.name, ing.status));
         });
-        
+
         editingIndex = index;
-        
+
         $('#formTitle').textContent = 'Редактировать рецепт';
         $('#submitBtn').textContent = 'Обновить рецепт';
         $('#cancelEditBtn').style.display = 'inline-block';
-        
+
         // Прокрутка к форме
         window.scrollTo(0, 0);
     }
-    
+
     // Отмена редактирования
     $('#cancelEditBtn').addEventListener('click', function() {
         editingIndex = null;
@@ -231,15 +228,15 @@
         $('#submitBtn').textContent = 'Сохранить рецепт';
         $('#cancelEditBtn').style.display = 'none';
     });
-    
+
     // Обработчик отправки формы – сохранение или обновление рецепта
     $('#recipeForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const title = $('#recipeTitle').value.trim();
         const instructions = $('#instructions').value.trim();
         const recipeStatus = $('#recipeStatus').value;
-        
+
         // Собираем ингредиенты
         const ingredientDivs = document.querySelectorAll('#ingredientsList .ingredient');
         const ingredients = [];
@@ -250,12 +247,12 @@
             ingredients.push({ name, status });
             }
         });
-        
+
         if (title === '' || instructions === '' || ingredients.length === 0) {
             alert('Пожалуйста, заполните все поля и добавьте хотя бы один ингредиент.');
             return;
         }
-        
+
         const recipes = loadRecipes();
         if (editingIndex !== null) {
             // Обновление существующего рецепта
@@ -265,16 +262,16 @@
             // Добавление нового рецепта
             recipes.push({ title, status: recipeStatus, ingredients, instructions });
         }
-        
+
         saveRecipes(recipes);
-        
+
         $('#recipeForm').reset();
         ingredientsList.innerHTML = '';
         ingredientsList.appendChild(createIngredientRow());
         $('#formTitle').textContent = 'Добавить рецепт';
         $('#submitBtn').textContent = 'Сохранить рецепт';
         $('#cancelEditBtn').style.display = 'none';
-        
+
         renderRecipes();
     });
 
@@ -387,7 +384,7 @@
             alert("Error parsing recipes data.");
         }
     });
-    
+
     // Первоначальное отображение рецептов
     renderRecipes();
 })();
