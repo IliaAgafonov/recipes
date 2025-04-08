@@ -156,7 +156,9 @@
       
       recipes.forEach((recipe, index) => {
         const div = $('div');
-        div.classList.add('recipe one-half column');
+        div.classList.add('recipe');
+        div.classList.add('one-half');
+        div.classList.add('column');
         
         if (recipe.status) {
           const mapping = statusMapping[recipe.status] || {};
@@ -174,7 +176,7 @@
         
         const ingList = $('ul');
         recipe.ingredients.forEach(ing => {
-          const mapping = ingStatusMapping(ing.status) || {};
+          const mapping = ingStatusMapping[ing.status] || {};
           const li = $('li');
           li.textContent = ing.name + ' (' + (mapping.text || ing.status) + ')';
           ingList.appendChild(li);
