@@ -1,53 +1,75 @@
-/* Import a lightweight CSS library: Skeleton */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css');
 
-/* Base styling overrides for dark theme */
+/* CSS Variables for Dark Theme */
+:root {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --heading-color: #f5f5f5;
+  --section-bg: #1e1e1e;
+  --input-bg: #2c2c2c;
+  --input-border: #444;
+  --button-bg: #3498db;
+  --button-hover-bg: #2980b9;
+  --cancel-bg: #e74c3c;
+  --cancel-hover-bg: #c0392b;
+  --modal-bg: rgba(0, 0, 0, 0.6);
+  --modal-content-bg: #1e1e1e;
+  --modal-border: #888;
+  --modal-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Global Reset & Box Sizing */
+* {
+  box-sizing: border-box;
+}
+
+/* Body & Typography */
 body {
-  background-color: #121212;
-  color: #e0e0e0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Roboto', sans-serif;
   padding: 20px;
   margin: 0 auto;
   max-width: 800px;
+  line-height: 1.6;
 }
 
 /* Headings */
 h1, h2 {
-  color: #f5f5f5;
-  margin-top: 20px;
+  color: var(--heading-color);
+  margin-top: 1.5rem;
 }
 
 /* Recipe Form Section */
 #recipeFormSection {
-  background: #1e1e1e;
+  background: var(--section-bg);
   padding: 20px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px var(--modal-shadow);
   margin-bottom: 30px;
 }
 
-/* Ingredients section styles */
+/* Ingredients Section */
 .ingredient {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.ingredient input[type="text"] {
+.ingredient input[type="text"],
+.ingredient select {
   flex: 1;
   margin-right: 10px;
-  background: #2c2c2c;
-  border: 1px solid #444;
-  color: #e0e0e0;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
   padding: 8px;
+  border-radius: 4px;
 }
 
 .ingredient select {
-  margin-right: 10px;
-  background: #2c2c2c;
-  border: 1px solid #444;
-  color: #e0e0e0;
-  padding: 8px;
+  flex: 0 0 auto;
 }
 
 .ingredient .remove-ingredient {
@@ -56,13 +78,14 @@ h1, h2 {
   color: #e74c3c;
   cursor: pointer;
   transition: color 0.3s ease;
+  font-size: 1rem;
 }
 
 .ingredient .remove-ingredient:hover {
   color: #c0392b;
 }
 
-/* Ingredient status specific styles */
+/* Specific Ingredient Styles */
 .ingredient.optional {
   font-style: italic;
   color: #bdc3c7;
@@ -73,31 +96,31 @@ h1, h2 {
   color: #3498db;
 }
 
-/* Recipe list styling */
+/* Recipe List */
 .recipe {
-  background: #1e1e1e;
+  background: var(--section-bg);
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px var(--modal-shadow);
   border: 1px solid #333;
 }
 
 .recipe h3 {
   display: inline-block;
   margin: 0;
-  font-size: 1.5em;
-  color: #f5f5f5;
+  font-size: 1.5rem;
+  color: var(--heading-color);
 }
 
-/* Recipe status label colors */
+/* Status Labels */
 .status-tasty {
   background-color: #2ecc71;
   color: #fff;
   padding: 3px 8px;
   margin-left: 10px;
   border-radius: 3px;
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
 .status-not-so-good {
@@ -106,7 +129,7 @@ h1, h2 {
   padding: 3px 8px;
   margin-left: 10px;
   border-radius: 3px;
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
 .status-not-tried {
@@ -115,54 +138,67 @@ h1, h2 {
   padding: 3px 8px;
   margin-left: 10px;
   border-radius: 3px;
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 
+/* Edit Button (within recipes) */
 .recipe .edit-button {
+  border: none;
+  background: var(--button-bg);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
   height: 30px;
   line-height: 30px;
   padding: 0 10px;
 }
 
-/* Ingredients list for recipe display */
+.recipe .edit-button:hover {
+  background: var(--button-hover-bg);
+}
+
+/* Ingredients List Display */
 .recipe ul {
   list-style-type: disc;
   margin: 10px 0 10px 20px;
   padding: 0;
-  color: #e0e0e0;
+  color: var(--text-color);
 }
 
-/* Recipe instructions with preserved line breaks */
+/* Recipe Instructions */
 .instructions {
   white-space: pre-wrap;
   margin-top: 10px;
-  font-size: 1em;
+  font-size: 1rem;
   line-height: 1.5;
-  color: #e0e0e0;
+  color: var(--text-color);
 }
 
-/* Buttons styling */
+/* Buttons (General) */
 button {
-  background: #3498db;
+  background: var(--button-bg);
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s ease;
+  border: none;
+  padding: 8px 12px;
 }
 
 button:hover {
-  background: #2980b9;
+  background: var(--button-hover-bg);
 }
 
 #cancelEditBtn {
-  background: #e74c3c;
+  background: var(--cancel-bg);
 }
 
 #cancelEditBtn:hover {
-  background: #c0392b;
+  background: var(--cancel-hover-bg);
 }
 
-/* Modal container */
+/* Modal Styles */
 .modal {
   position: fixed;
   z-index: 1000;
@@ -171,28 +207,26 @@ button:hover {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.6);
+  background-color: var(--modal-bg);
   display: none;
 }
 
-/* Modal content */
 .modal-content {
-  background-color: #1e1e1e;
+  background-color: var(--modal-content-bg);
   margin: 10% auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--modal-border);
   width: 80%;
   max-width: 500px;
   border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  box-shadow: 0 5px 15px var(--modal-shadow);
 }
 
 .modal-content h2 {
   margin-top: 0;
-  color: #f5f5f5;
+  color: var(--heading-color);
 }
 
-/* Close button for modals */
 .close {
   color: #aaa;
   float: right;
@@ -207,33 +241,37 @@ button:hover {
   text-decoration: none;
 }
 
-/* Style for export/import trigger buttons */
+/* Export/Import Trigger Buttons */
 #exportBtn,
 #importBtnShow {
   margin: 10px 5px;
-  background: #3498db;
+  background: var(--button-bg);
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s ease;
+  padding: 8px 12px;
 }
 
 #exportBtn:hover,
 #importBtnShow:hover {
-  background: #2980b9;
+  background: var(--button-hover-bg);
 }
 
-/* Form input and textarea dark styles */
+/* Form Elements */
 input[type="text"],
 textarea,
 select {
-  background: #2c2c2c;
-  border: 1px solid #444;
-  color: #e0e0e0;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+  padding: 8px;
+  border-radius: 4px;
 }
 
-/* Smooth transitions for interactive elements */
-* {
-  transition: all 0.3s ease;
+textarea {
+  width: 100%;
+  min-height: 150px;
+  resize: vertical;
 }
