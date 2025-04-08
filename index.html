@@ -168,16 +168,10 @@
           div.appendChild(statusSpan);
         }
         
-        const nbsp = $('span');
-        nbsp.classList.add('u-cf');
-        nbsp.innerHTML = '&nbsp;';
-        div.appendChild(nbsp);
-        
         const title = $('h3');
         title.textContent = recipe.title;
+        title.style = "margin: 0 10px";
         div.appendChild(title);
-
-        div.appendChild(nbsp);
         
         const editBtn = $('button');
         editBtn.type = 'button';
@@ -188,6 +182,11 @@
           editRecipe(index);
         });
         div.appendChild(editBtn);
+
+        const nbsp = $('span');
+        nbsp.classList.add('u-cf');
+        nbsp.innerHTML = '&nbsp;';
+        div.appendChild(nbsp);
         
         const ingList = $('ul');
         recipe.ingredients.forEach(ing => {
