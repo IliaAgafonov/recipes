@@ -393,11 +393,31 @@
         return;
       }
       try {
-        const recipes = JSON.parse(decompressed);
-        saveRecipes(recipes);
+        const importedRecipes = JSON.parse(decompressed);
+        const currentRecipes = loadRecipes();
+        let newCount = 0;
+
+        // Helper function to check equality of two recipes
+        function recipesEqual(r1, r2) {
+          return r1.title === r2.title &&
+                r1.instructions === r2.instructions &&
+                JSON.stringify(r1.ingredients) === JSON.stringify(r2.ingredients);
+        }
+
+        importedRecipes.forEach(function(newRecipe) {
+          const duplicateFound = currentRecipes.some(function(existingRecipe) {
+            return recipesEqual(existingRecipe, newRecipe);
+          });
+          if (!duplicateFound) {
+            currentRecipes.push(newRecipe);
+            newCount++;
+          }
+        });
+
+        saveRecipes(currentRecipes);
         renderRecipes();
         closeModal(importModal);
-        alert("Recipes imported successfully!");
+        alert("Recipes imported successfully! " + newCount + " new recipe(s) added.");
       } catch (e) {
         alert("Error parsing recipes data.");
       }
