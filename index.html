@@ -40,9 +40,9 @@
     </form>
   </section>
 
-  <section id="recipesSection">
+  <section id="recipesSection" class="container">
     <h2>Сохраненные рецепты</h2>
-    <div id="recipesList"></div>
+    <div id="recipesList" class="row"></div>
   </section>
 
   <script>
@@ -148,14 +148,15 @@
         'not-so-good': { text: 'Не очень', class: 'status-not-so-good' },
         'not-tried': { text: 'Не пробовал', class: 'status-not-tried' }
       };
+      const ingStatusMapping = {
+        'required': { text: 'Обязательный' },
+        'optional': { text: 'Опциональный' },
+        'interchangeable': { text: 'Взаимозаменяемый' }
+      };
       
       recipes.forEach((recipe, index) => {
         const div = $('div');
-        div.classList.add('recipe');
-        
-        const title = $('h3');
-        title.textContent = recipe.title;
-        div.appendChild(title);
+        div.classList.add('recipe one-half column');
         
         if (recipe.status) {
           const mapping = statusMapping[recipe.status] || {};
@@ -167,10 +168,15 @@
           div.appendChild(statusSpan);
         }
         
+        const title = $('h3');
+        title.textContent = recipe.title;
+        div.appendChild(title);
+        
         const ingList = $('ul');
         recipe.ingredients.forEach(ing => {
+          const mapping = ingStatusMapping(ing.status) || {};
           const li = $('li');
-          li.textContent = ing.name + ' (' + (ing.status === 'required' ? 'Обязательный' : (ing.status === 'optional' ? 'Опциональный' : 'Взаимозаменяемый')) + ')';
+          li.textContent = ing.name + ' (' + (mapping.text || ing.status) + ')';
           ingList.appendChild(li);
         });
         div.appendChild(ingList);
