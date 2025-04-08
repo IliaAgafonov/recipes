@@ -53,7 +53,6 @@ h1, h2 {
 .ingredient .remove-ingredient {
   border: none;
   background: transparent;
-  font-size: 16px;
   color: #e74c3c;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -119,6 +118,12 @@ h1, h2 {
   font-size: 0.9em;
 }
 
+.recipe .edit-button {
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+}
+
 /* Ingredients list for recipe display */
 .recipe ul {
   list-style-type: disc;
@@ -139,9 +144,7 @@ h1, h2 {
 /* Buttons styling */
 button {
   background: #3498db;
-  border: none;
   color: #fff;
-  padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s ease;
