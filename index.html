@@ -168,18 +168,26 @@
           div.appendChild(statusSpan);
         }
         
-        const editBtn = $('button');
-        editBtn.type = 'button';
-        editBtn.textContent = 'Редактировать';
-        editBtn.classList.add('edit-button');
-        editBtn.addEventListener('click', function() {
-          editRecipe(index);
-        });
-        div.appendChild(editBtn);
+        const nbsp = $('span');
+        nbsp.classList.add('u-cf');
+        nbsp.textContent = '&nbsp;';
+        div.appendChild(nbsp);
         
         const title = $('h3');
         title.textContent = recipe.title;
         div.appendChild(title);
+        
+        div.appendChild(nbsp);
+        
+        const editBtn = $('button');
+        editBtn.type = 'button';
+        editBtn.textContent = 'Редактировать';
+        editBtn.classList.add('edit-button');
+        editBtn.classList.add('pull-right');
+        editBtn.addEventListener('click', function() {
+          editRecipe(index);
+        });
+        div.appendChild(editBtn);
         
         const ingList = $('ul');
         recipe.ingredients.forEach(ing => {
