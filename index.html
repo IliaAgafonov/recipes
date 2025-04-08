@@ -10,6 +10,12 @@
 <body>
   <h1>Рецепты</h1>
 
+  <section id="topButtons">
+    <!-- Buttons to trigger modals -->
+    <button id="exportBtn">Export Recipes</button>
+    <button id="importBtnShow">Import Recipes</button>
+  </section>
+
   <section id="recipeFormSection">
     <h2 id="formTitle">Добавить рецепт</h2>
     <form id="recipeForm">
@@ -65,10 +71,6 @@
       <button id="importBtn">Import Recipes</button>
     </div>
   </div>
-
-  <!-- Buttons to trigger modals -->
-  <button id="exportBtn">Export Recipes</button>
-  <button id="importBtnShow">Import Recipes</button>
 
   <script>
     // JQuery 4o-mini
@@ -213,19 +215,27 @@
         nbsp.innerHTML = '&nbsp;';
         div.appendChild(nbsp);
         
+        const row = $('div');
+        row.classList.add('row');
+
         const ingList = $('ul');
+        ingList.classList.add('one-half');
+        ingList.classList.add('column');
         recipe.ingredients.forEach(ing => {
           const mapping = ingStatusMapping[ing.status] || {};
           const li = $('li');
           li.textContent = ing.name + ' (' + (mapping.text || ing.status) + ')';
           ingList.appendChild(li);
         });
-        div.appendChild(ingList);
+        row.appendChild(ingList);
         
         const instr = $('div');
         instr.classList.add('instructions');
+        instr.classList.add('one-half');
+        instr.classList.add('column');
         instr.textContent = recipe.instructions;
-        div.appendChild(instr);
+        row.appendChild(instr);
+        div.appendChild(row)
         
         recipesList.appendChild(div);
       });
