@@ -50,11 +50,41 @@
     }
     .recipe h3 {
       margin-top: 0;
+      display: inline-block;
     }
     .edit-button, .cancel-edit-button {
       margin-right: 10px;
       padding: 5px 10px;
       cursor: pointer;
+    }
+    /* Стили для статуса рецепта */
+    .status-tasty {
+      background-color: green;
+      color: white;
+      padding: 2px 5px;
+      margin-left: 10px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    .status-not-so-good {
+      background-color: orange;
+      color: white;
+      padding: 2px 5px;
+      margin-left: 10px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    .status-not-tried {
+      background-color: gray;
+      color: white;
+      padding: 2px 5px;
+      margin-left: 10px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    /* Поддержка переноса строк в инструкции */
+    .instructions {
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -67,6 +97,14 @@
       <div>
         <label for="recipeTitle">Название рецепта:</label><br>
         <input type="text" id="recipeTitle" name="recipeTitle" required>
+      </div>
+      <div>
+        <label for="recipeStatus">Статус рецепта:</label><br>
+        <select id="recipeStatus" name="recipeStatus">
+          <option value="tasty">Вкусно</option>
+          <option value="not-so-good">Не очень</option>
+          <option value="not-tried">Не пробовал</option>
+        </select>
       </div>
       <div id="ingredientsContainer">
         <h3>Ингредиенты</h3>
@@ -90,7 +128,7 @@
   </section>
 
   <script>
-    let editingIndex = null; // Переменная для хранения индекса редактируемого рецепта
+    let editingIndex = null; // Хранит индекс редактируемого рецепта
 
     // Функция для создания новой строки ингредиента
     function createIngredientRow(name = '', status = 'required') {
@@ -124,7 +162,7 @@
         select.appendChild(option);
       });
       
-      // При смене статуса обновляем класс для наглядного отображения
+      // При смене статуса обновляем класс для визуального отображения
       select.addEventListener('change', function() {
         div.classList.remove('optional', 'interchangeable');
         if (select.value === 'optional') {
@@ -149,7 +187,7 @@
       return div;
     }
     
-    // Добавляем первую строку ингредиента при загрузке страницы
+    // Добавляем первую строку ингредиента при загрузке
     const ingredientsList = document.getElementById('ingredientsList');
     ingredientsList.appendChild(createIngredientRow());
     
@@ -158,30 +196,50 @@
       ingredientsList.appendChild(createIngredientRow());
     });
     
-    // Функция для получения рецептов из localStorage
+    // Получить рецепты из localStorage
     function loadRecipes() {
       const recipes = localStorage.getItem('recipes');
       return recipes ? JSON.parse(recipes) : [];
     }
     
-    // Функция для сохранения рецептов в localStorage
+    // Сохранить рецепты в localStorage
     function saveRecipes(recipes) {
       localStorage.setItem('recipes', JSON.stringify(recipes));
     }
     
-    // Функция для отображения списка сохраненных рецептов
+    // Отобразить сохраненные рецепты
     function renderRecipes() {
       const recipesList = document.getElementById('recipesList');
       recipesList.innerHTML = '';
       const recipes = loadRecipes();
+      
+      // Маппинг для статуса рецепта: текст и класс для оформления
+      const statusMapping = {
+        'tasty': { text: 'Вкусно', class: 'status-tasty' },
+        'not-so-good': { text: 'Не очень', class: 'status-not-so-good' },
+        'not-tried': { text: 'Не пробовал', class: 'status-not-tried' }
+      };
+      
       recipes.forEach((recipe, index) => {
         const div = document.createElement('div');
         div.classList.add('recipe');
         
+        // Заголовок рецепта с добавлением статуса в виде цветного спана
         const title = document.createElement('h3');
         title.textContent = recipe.title;
         div.appendChild(title);
         
+        if (recipe.status) {
+          const mapping = statusMapping[recipe.status] || {};
+          const statusSpan = document.createElement('span');
+          statusSpan.textContent = mapping.text || recipe.status;
+          if (mapping.class) {
+            statusSpan.classList.add(mapping.class);
+          }
+          div.appendChild(statusSpan);
+        }
+        
+        // Список ингредиентов
         const ingList = document.createElement('ul');
         recipe.ingredients.forEach(ing => {
           const li = document.createElement('li');
@@ -190,7 +248,9 @@
         });
         div.appendChild(ingList);
         
-        const instr = document.createElement('p');
+        // Инструкция с поддержкой переноса строк
+        const instr = document.createElement('div');
+        instr.classList.add('instructions');
         instr.textContent = recipe.instructions;
         div.appendChild(instr);
         
@@ -208,15 +268,17 @@
       });
     }
     
-    // Функция для загрузки рецепта в форму редактирования
+    // Загрузка данных рецепта в форму для редактирования
     function editRecipe(index) {
       const recipes = loadRecipes();
       const recipe = recipes[index];
       
       document.getElementById('recipeTitle').value = recipe.title;
       document.getElementById('instructions').value = recipe.instructions;
+      // Устанавливаем статус рецепта
+      document.getElementById('recipeStatus').value = recipe.status || 'not-tried';
       
-      // Очищаем список ингредиентов и заполняем его ингредиентами выбранного рецепта
+      // Очищаем список ингредиентов и загружаем ингредиенты рецепта
       ingredientsList.innerHTML = '';
       recipe.ingredients.forEach(ing => {
         ingredientsList.appendChild(createIngredientRow(ing.name, ing.status));
@@ -229,11 +291,11 @@
       document.getElementById('submitBtn').textContent = 'Обновить рецепт';
       document.getElementById('cancelEditBtn').style.display = 'inline-block';
       
-      // Прокручиваем страницу к форме
+      // Прокрутка к форме
       window.scrollTo(0, 0);
     }
     
-    // Обработчик кнопки отмены редактирования
+    // Отмена редактирования
     document.getElementById('cancelEditBtn').addEventListener('click', function() {
       editingIndex = null;
       document.getElementById('recipeForm').reset();
@@ -244,14 +306,15 @@
       document.getElementById('cancelEditBtn').style.display = 'none';
     });
     
-    // Обработчик отправки формы – добавление нового рецепта или обновление существующего
+    // Обработчик отправки формы – добавление или обновление рецепта
     document.getElementById('recipeForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
       const title = document.getElementById('recipeTitle').value.trim();
       const instructions = document.getElementById('instructions').value.trim();
+      const recipeStatus = document.getElementById('recipeStatus').value;
       
-      // Собираем данные по ингредиентам
+      // Собираем ингредиенты
       const ingredientDivs = document.querySelectorAll('#ingredientsList .ingredient');
       const ingredients = [];
       ingredientDivs.forEach(div => {
@@ -271,11 +334,11 @@
       
       if (editingIndex !== null) {
         // Обновление существующего рецепта
-        recipes[editingIndex] = { title, ingredients, instructions };
+        recipes[editingIndex] = { title, status: recipeStatus, ingredients, instructions };
         editingIndex = null;
       } else {
-        // Сохранение нового рецепта
-        recipes.push({ title, ingredients, instructions });
+        // Добавление нового рецепта
+        recipes.push({ title, status: recipeStatus, ingredients, instructions });
       }
       
       saveRecipes(recipes);
@@ -291,7 +354,7 @@
       renderRecipes();
     });
     
-    // Отображаем рецепты при загрузке страницы
+    // Первоначальное отображение рецептов
     renderRecipes();
   </script>
 </body>
