@@ -31,6 +31,18 @@
             errorParse: "Error parsing recipes data.",
             pasteExported: "Please paste the exported recipes string.",
             decompressError: "Failed to decompress recipes. Please check your input.",
+            generateRecipeModalTitle: "Generate Recipe",
+            openaiApiKeyLabel: "OpenAI API Key:",
+            dietaryRestrictionsLabel: "Dietary Restrictions:",
+            recipeRequestLabel: "Recipe Request:",
+            aiSubmitBtn: "Generate",
+            generateAiRecipeBtn: "Generate AI Recipe",
+            pleaseFillAllFields: "Please fill in all fields.",
+            failedToParseRecipe: "Failed to parse recipe. Please try again.",
+            noRecipeGenerated: "No recipe was generated, please try again.",
+            errorCallingApi: "Error calling OpenAI API. Please check your API key and try again.",
+            dietaryRestrictionsPlaceholder: "e.g., gluten-free, vegan",
+            recipeRequestPlaceholder: "e.g., a quick pasta dish",
             languageSwitch: { ru: "Русский", ka: "ქართული", en: "English" }
         },
         ru: {
@@ -63,6 +75,18 @@
             errorParse: "Ошибка импорта рецептов.",
             pasteExported: "Пожалуйста, вставьте экспортированную строку рецептов.",
             decompressError: "Ошибка декомпрессии рецептов. Пожалуйста, проверьте ваш ввод.",
+            generateRecipeModalTitle: "Сгенерировать рецепт",
+            openaiApiKeyLabel: "OpenAI API ключ:",
+            dietaryRestrictionsLabel: "Диетические ограничения:",
+            recipeRequestLabel: "Запрос рецепта:",
+            aiSubmitBtn: "Сгенерировать",
+            generateAiRecipeBtn: "Сгенерировать рецепт ИИ",
+            pleaseFillAllFields: "Пожалуйста, заполните все поля.",
+            failedToParseRecipe: "Не удалось разобрать рецепт. Пожалуйста, попробуйте снова.",
+            noRecipeGenerated: "Рецепт не был сгенерирован, попробуйте еще раз.",
+            errorCallingApi: "Ошибка вызова API OpenAI. Пожалуйста, проверьте ваш API ключ и попробуйте снова.",
+            dietaryRestrictionsPlaceholder: "например, без глютена, веганский",
+            recipeRequestPlaceholder: "например, быстрое блюдо из пасты",
             languageSwitch: { ru: "Русский", ka: "ქართული", en: "English" }
         },
         ka: {
@@ -95,6 +119,18 @@
             errorParse: "რეცეპტების მონაცემების გაწვდვის შეცდომა.",
             pasteExported: "გთხოვთ ჩასვით ექსპორტირებული რეცეპტების ტექსტი.",
             decompressError: "რეცეპტების გაწვდვა ვერ მოხერხდა. გთხოვთ შეამოწმოთ თქვენი მონაცემები.",
+            generateRecipeModalTitle: "რეცეპტის გენერირება",
+            openaiApiKeyLabel: "OpenAI API გასაღები:",
+            dietaryRestrictionsLabel: "დიეტური შეზღუდვები:",
+            recipeRequestLabel: "რეცეპტის მოთხოვნა:",
+            aiSubmitBtn: "გენერირება",
+            generateAiRecipeBtn: "AI რეცეპტის გენერირება",
+            pleaseFillAllFields: "გთხოვთ შეავსოთ ყველა ველი.",
+            failedToParseRecipe: "რეცეპტის გაწვდვა ვერ მოხერხდა. გთხოვთ სცადოთ თავიდან.",
+            noRecipeGenerated: "რეცეპტი ვერ გენერირდა, გთხოვთ სცადოთ თავიდან.",
+            errorCallingApi: "OpenAI API-სთან დაკავშირების შეცდომა. გთხოვთ შეამოწმოთ თქვენი API გასაღები და სცადოთ თავიდან.",
+            dietaryRestrictionsPlaceholder: "მაგალითად, გლუტენის გარეშე, ვეგანური",
+            recipeRequestPlaceholder: "მაგალითად, სწრაფი მაკარონის კერძი",
             languageSwitch: { ru: "Русский", en: "English", ka: "ქართული" }
         }
     };
@@ -346,6 +382,10 @@
     const copyExport = $('#copyExport');
     const importText = $('#importText');
     const importBtn = $('#importBtn');
+    const aiModal = $('#aiModal');
+    const openAiModalBtn = $('#openAiModalBtn');
+    const closeAiModal = $('#closeAiModal');
+    const aiForm = $('#aiForm');
 
     function openModal(modal) {
         modal.style.display = "block";
@@ -377,11 +417,88 @@
         openModal(importModal);
     });
 
+    openAiModalBtn.addEventListener('click', function() {
+        const savedKey = localStorage.getItem('openaiApiKey') || '';
+        const savedRestrictions = localStorage.getItem('dietaryRestrictions') || '';
+        $('#openaiApiKey').value = savedKey;
+        $('#dietaryRestrictions').value = savedRestrictions;
+        $('#userRequest').value = '';
+        openModal(aiModal)
+    });
+
+    aiForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const apiKey = $('#openaiApiKey').value.trim();
+        const restrictions = $('#dietaryRestrictions').value.trim();
+        const userRequest = $('#userRequest').value.trim();
+
+        if (!apiKey || !restrictions || !userRequest) {
+            alert(_( "pleaseFillAllFields" ));
+            return;
+        }
+
+        localStorage.setItem('openaiApiKey', apiKey);
+        localStorage.setItem('dietaryRestrictions', restrictions);
+
+        const prompt = `Generate a creative recipe based on the following request: "${userRequest}".
+Dietary restrictions: "${restrictions}".
+Output only a valid JSON object with the following keys:
+{
+  "title": string,
+  "ingredients": array of strings,
+  "description": string
+}
+Do not include any additional text.`;
+
+        fetch("https://api.openai.com/v1/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + apiKey
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-2024-08-06",
+                prompt: prompt,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.choices && data.choices.length > 0) {
+                    let resultText = data.choices[0].text.trim();
+                    try {
+                        const recipe = JSON.parse(resultText);
+                        $('#recipeTitle').value = recipe.title || "";
+                        $('#instructions').value = recipe.description || "";
+                        ingredientsList.innerHTML = '';
+                        if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+                            recipe.ingredients.forEach(ing => {
+                                ingredientsList.appendChild(createIngredientRow(ing));
+                            });
+                        }
+                        closeModal(aiModal);
+                        window.scrollTo(0, 0);
+                    } catch (err) {
+                        console.error("Parsing error:", err);
+                        alert(_( "failedToParseRecipe" ));
+                    }
+                } else {
+                    alert(_( "noRecipeGenerated" ));
+                }
+            })
+            .catch(error => {
+                console.error("Error calling OpenAI API:", error);
+                alert(_( "errorCallingApi" ));
+            });
+    });
+
     closeExportModal.addEventListener('click', function() {
         closeModal(exportModal);
     });
     closeImportModal.addEventListener('click', function() {
         closeModal(importModal);
+    });
+    closeAiModal.addEventListener('click', function() {
+        closeModal(aiModal);
     });
 
     window.addEventListener('click', function(event) {
@@ -389,6 +506,8 @@
             closeModal(exportModal);
         } else if (event.target === importModal) {
             closeModal(importModal);
+        } else if (event.target === aiModal) {
+            closeModal(aiModal);
         }
     });
 

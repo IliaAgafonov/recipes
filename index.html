@@ -24,6 +24,7 @@
 <section id="topButtons">
     <button id="exportBtn" data-i18n="exportRecipes">Export Recipes</button>
     <button id="importBtnShow" data-i18n="importRecipes">Import Recipes</button>
+    <button id="openAiModalBtn" data-i18n="generateAiRecipeBtn">Generate AI Recipe</button>
     <div id="langSwitch"></div>
 </section>
 
@@ -79,6 +80,34 @@
         <textarea id="importText" placeholder="Paste your exported recipes here"
                   data-i18n-placeholder="importPlaceholder" style="width:100%; height:150px;"></textarea>
         <button id="importBtn" data-i18n="importRecipes">Import Recipes</button>
+    </div>
+</div>
+
+<div id="aiModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" id="closeAiModal">&times;</span>
+        <h2 data-i18n="generateRecipeModalTitle">Generate Recipe</h2>
+        <form id="aiForm">
+            <div>
+                <label for="openaiApiKey" data-i18n="openaiApiKeyLabel">OpenAI API Key:</label><br>
+                <input type="text" id="openaiApiKey" name="openaiApiKey" required>
+            </div>
+            <div>
+                <label for="dietaryRestrictions" data-i18n="dietaryRestrictionsLabel">Dietary Restrictions:</label><br>
+                <textarea id="dietaryRestrictions" name="dietaryRestrictions" rows="3"
+                          placeholder=""
+                          data-i18n-placeholder="dietaryRestrictionsPlaceholder"></textarea>
+            </div>
+            <div>
+                <label for="userRequest" data-i18n="recipeRequestLabel">Recipe Request:</label><br>
+                <textarea id="userRequest" name="userRequest" rows="3" required
+                          placeholder=""
+                          data-i18n-placeholder="recipeRequestPlaceholder"></textarea>
+            </div>
+            <div>
+                <button type="submit" id="aiSubmitBtn" data-i18n="aiSubmitBtn">Generate</button>
+            </div>
+        </form>
     </div>
 </div>
 
