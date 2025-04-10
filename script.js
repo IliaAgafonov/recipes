@@ -429,6 +429,7 @@
     });
 
     function renderPage() {
+        window.title = _( "headerTitle" );
         updateTexts();
         updateLanguageSwitch();
         renderRecipes();
