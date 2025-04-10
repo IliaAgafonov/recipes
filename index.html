@@ -1,96 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#121212">
-  <meta name="description" content="Manage your recipes with this lightweight Progressive Web App. Add, edit, import and export recipes seamlessly.">
-  <meta name="keywords" content="recipes, PWA, cooking, food, app">
-  <meta name="author" content="Ilia Agafonov">
-  <title>Recipes</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" type="image/png" href="icons/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
-  <link rel="shortcut icon" href="favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="Recipes App" />
-  <link rel="manifest" href="manifest.json">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#121212">
+    <meta name="description"
+          content="Manage your recipes with this lightweight Progressive Web App. Add, edit, import, and export recipes seamlessly.">
+    <meta name="keywords" content="recipes, PWA, cooking, food, app">
+    <meta name="author" content="Ilia Agafonov">
+    <title>Recipes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="icons/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/svg+xml" href="icons/favicon.svg"/>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png"/>
+    <meta name="apple-mobile-web-app-title" content="Recipes App"/>
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 </head>
 <body>
-  <h1>Recipes</h1>
+<h1 data-i18n="headerTitle">Recipes</h1>
 
-  <section id="topButtons">
-    <button id="exportBtn">Export Recipes</button>
-    <button id="importBtnShow">Import Recipes</button>
-  </section>
+<section id="topButtons">
+    <button id="exportBtn" data-i18n="exportRecipes">Export Recipes</button>
+    <button id="importBtnShow" data-i18n="importRecipes">Import Recipes</button>
+    <div id="langSwitch"></div>
+</section>
 
-  <section id="recipeFormSection">
-    <h2 id="formTitle">Add Recipe</h2>
+<section id="recipeFormSection">
+    <h2 id="formTitle" data-i18n="formTitleAdd">Add Recipe</h2>
     <form id="recipeForm">
-      <div>
-        <label for="recipeTitle">Recipe Title:</label><br>
-        <input type="text" id="recipeTitle" name="recipeTitle" required>
-      </div>
-      <div>
-        <label for="recipeStatus">Recipe Status:</label><br>
-        <select id="recipeStatus" name="recipeStatus">
-          <option value="tasty">Tasty</option>
-          <option value="not-so-good">Not so good</option>
-          <option value="not-tried">Not tried</option>
-        </select>
-      </div>
-      <div id="ingredientsContainer">
-        <h3>Ingredients</h3>
-        <div id="ingredientsList"></div>
-        <button type="button" id="addIngredientBtn">Add Ingredient</button>
-      </div>
-      <div>
-        <label for="instructions">Instructions:</label><br>
-        <textarea id="instructions" name="instructions" rows="5" cols="50" required></textarea>
-      </div>
-      <div>
-        <button type="submit" id="submitBtn">Save Recipe</button>
-        <button type="button" id="cancelEditBtn" style="display:none;">Cancel Edit</button>
-      </div>
+        <div>
+            <label for="recipeTitle" data-i18n="recipeTitleLabel">Recipe Title:</label><br>
+            <input type="text" id="recipeTitle" name="recipeTitle" required>
+        </div>
+        <div>
+            <label for="recipeStatus" data-i18n="recipeStatusLabel">Recipe Status:</label><br>
+            <select id="recipeStatus" name="recipeStatus">
+                <option value="tasty" data-i18n="optionTasty">Tasty</option>
+                <option value="not-so-good" data-i18n="optionNotSoGood">Not so good</option>
+                <option value="not-tried" data-i18n="optionNotTried">Not tried</option>
+            </select>
+        </div>
+        <div id="ingredientsContainer">
+            <h3 data-i18n="ingredientSectionTitle">Ingredients</h3>
+            <div id="ingredientsList"></div>
+            <button type="button" id="addIngredientBtn" data-i18n="addIngredient">Add Ingredient</button>
+        </div>
+        <div>
+            <label for="instructions" data-i18n="instructionsLabel">Instructions:</label><br>
+            <textarea id="instructions" name="instructions" rows="5" cols="50" required></textarea>
+        </div>
+        <div>
+            <button type="submit" id="submitBtn" data-i18n="saveRecipe">Save Recipe</button>
+            <button type="button" id="cancelEditBtn" style="display:none;" data-i18n="cancelEdit">Cancel Edit</button>
+        </div>
     </form>
-  </section>
+</section>
 
-  <section id="recipesSection">
-    <h2>Saved Recipes</h2>
+<section id="recipesSection">
+    <h2 data-i18n="savedRecipes">Saved Recipes</h2>
     <div id="recipesList"></div>
-  </section>
+</section>
 
-  <div id="exportModal" class="modal" style="display:none;">
+<div id="exportModal" class="modal" style="display:none;">
     <div class="modal-content">
-      <span class="close" id="closeExportModal">&times;</span>
-      <h2>Export Recipes</h2>
-      <textarea id="exportText" readonly style="width:100%; height:150px;"></textarea>
-      <button id="copyExport">Copy to clipboard</button>
+        <span class="close" id="closeExportModal">&times;</span>
+        <h2 data-i18n="exportModalTitle">Export Recipes</h2>
+        <textarea id="exportText" readonly style="width:100%; height:150px;"></textarea>
+        <button id="copyExport" data-i18n="copyToClipboard">Copy to clipboard</button>
     </div>
-  </div>
+</div>
 
-  <div id="importModal" class="modal" style="display:none;">
+<div id="importModal" class="modal" style="display:none;">
     <div class="modal-content">
-      <span class="close" id="closeImportModal">&times;</span>
-      <h2>Import Recipes</h2>
-      <textarea id="importText" placeholder="Paste your exported recipes here" style="width:100%; height:150px;"></textarea>
-      <button id="importBtn">Import Recipes</button>
+        <span class="close" id="closeImportModal">&times;</span>
+        <h2 data-i18n="importModalTitle">Import Recipes</h2>
+        <textarea id="importText" placeholder="Paste your exported recipes here"
+                  data-i18n-placeholder="importPlaceholder" style="width:100%; height:150px;"></textarea>
+        <button id="importBtn" data-i18n="importRecipes">Import Recipes</button>
     </div>
-  </div>
+</div>
 
-  <script src="script.js"></script>
-  <script>
+<script src="script.js"></script>
+<script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(function(registration) {
-            console.log('ServiceWorker registration successful with scope:', registration.scope);
-          }, function(err) {
-            console.log('ServiceWorker registration failed:', err);
-          });
-      });
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(function (registration) {
+                    console.log('ServiceWorker registration successful with scope:', registration.scope);
+                }, function (err) {
+                    console.log('ServiceWorker registration failed:', err);
+                });
+        });
     }
-  </script>
+</script>
 </body>
 </html>
