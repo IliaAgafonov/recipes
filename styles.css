@@ -3,263 +3,263 @@
 
 /* CSS Variables for Dark Theme */
 :root {
-  --bg-color: #121212;
-  --text-color: #e0e0e0;
-  --heading-color: #f5f5f5;
-  --section-bg: #1e1e1e;
-  --input-bg: #2c2c2c;
-  --input-border: #444;
-  --button-bg: #3498db;
-  --button-hover-bg: #2980b9;
-  --cancel-bg: #e74c3c;
-  --cancel-hover-bg: #c0392b;
-  --modal-bg: rgba(0, 0, 0, 0.6);
-  --modal-content-bg: #1e1e1e;
-  --modal-border: #888;
-  --modal-shadow: rgba(0, 0, 0, 0.5);
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --heading-color: #f5f5f5;
+    --section-bg: #1e1e1e;
+    --input-bg: #2c2c2c;
+    --input-border: #444;
+    --button-bg: #3498db;
+    --button-hover-bg: #2980b9;
+    --cancel-bg: #e74c3c;
+    --cancel-hover-bg: #c0392b;
+    --modal-bg: rgba(0, 0, 0, 0.6);
+    --modal-content-bg: #1e1e1e;
+    --modal-border: #888;
+    --modal-shadow: rgba(0, 0, 0, 0.5);
 }
 
 /* Global Reset & Box Sizing */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* Body & Typography */
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: 'Roboto', sans-serif;
-  padding: 20px;
-  margin: 0 auto;
-  max-width: 800px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 800px;
 }
 
 /* Headings */
 h1, h2 {
-  color: var(--heading-color);
+    color: var(--heading-color);
 }
 
 #topButtons {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 /* Recipe Form Section */
 #recipeFormSection {
-  background: var(--section-bg);
-  padding: 20px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px var(--modal-shadow);
-  margin-bottom: 30px;
+    background: var(--section-bg);
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px var(--modal-shadow);
+    margin-bottom: 30px;
 }
 
 #recipeForm {
-  margin: 0;
+    margin: 0;
 }
 
 #recipeForm label {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 /* Ingredients Section */
 .ingredient {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .ingredient input[type="text"],
 .ingredient select {
-  flex: 1;
-  margin-right: 10px;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  color: var(--text-color);
-  padding: 8px;
-  border-radius: 4px;
+    flex: 1;
+    margin-right: 10px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    padding: 8px;
+    border-radius: 4px;
 }
 
 .ingredient select {
-  flex: 0 0 auto;
+    flex: 0 0 auto;
 }
 
 .ingredient .remove-ingredient {
-  border: none;
-  background: transparent;
-  color: #e74c3c;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  font-size: 1rem;
+    border: none;
+    background: transparent;
+    color: #e74c3c;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    font-size: 1rem;
 }
 
 .ingredient .remove-ingredient:hover {
-  color: #c0392b;
+    color: #c0392b;
 }
 
 /* Specific Ingredient Styles */
 .ingredient.optional {
-  font-style: italic;
-  color: #bdc3c7;
+    font-style: italic;
+    color: #bdc3c7;
 }
 
 .ingredient.interchangeable {
-  text-decoration: underline;
-  color: #3498db;
+    text-decoration: underline;
+    color: #3498db;
 }
 
 /* Recipe List */
 .recipe {
-  background: var(--section-bg);
-  padding: 15px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px var(--modal-shadow);
-  border: 1px solid #333;
+    background: var(--section-bg);
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px var(--modal-shadow);
+    border: 1px solid #333;
 }
 
 .recipe h3 {
-  display: inline-block;
-  margin: 0;
-  font-size: 2rem;
-  color: var(--heading-color);
+    display: inline-block;
+    margin: 0;
+    font-size: 2rem;
+    color: var(--heading-color);
 }
 
 /* Status Labels */
 .status-tasty {
-  background-color: #088e41;
-  color: #fff;
-  padding: 3px 8px;
-  margin-left: 10px;
-  border-radius: 3px;
+    background-color: #088e41;
+    color: #fff;
+    padding: 3px 8px;
+    margin-left: 10px;
+    border-radius: 3px;
 }
 
 .status-not-so-good {
-  background-color: #e67e22;
-  color: #fff;
-  padding: 3px 8px;
-  margin-left: 10px;
-  border-radius: 3px;
+    background-color: #e67e22;
+    color: #fff;
+    padding: 3px 8px;
+    margin-left: 10px;
+    border-radius: 3px;
 }
 
 .status-not-tried {
-  background-color: #7f8c8d;
-  color: #fff;
-  padding: 3px 8px;
-  margin-left: 10px;
-  border-radius: 3px;
+    background-color: #7f8c8d;
+    color: #fff;
+    padding: 3px 8px;
+    margin-left: 10px;
+    border-radius: 3px;
 }
 
 /* Edit Button (within recipes) */
 .recipe .edit-button, .recipe .remove-button {
-  height: 30px;
-  line-height: 30px;
-  padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
 }
 
 .recipe .remove-button {
-  background-color: #e74c3c;
-  margin: 0 10px;
+    background-color: #e74c3c;
+    margin: 0 10px;
 }
 
 /* Ingredients List Display */
 .recipe ul {
-  list-style-type: disc;
-  margin: 10px 0 10px 20px;
-  padding: 0;
-  color: var(--text-color);
+    list-style-type: disc;
+    margin: 10px 0 10px 20px;
+    padding: 0;
+    color: var(--text-color);
 }
 
 /* Recipe Instructions */
 .recipe .instructions {
-  white-space: pre-wrap;
-  margin-top: 10px;
-  line-height: 1.5;
-  color: var(--text-color);
+    white-space: pre-wrap;
+    margin-top: 10px;
+    line-height: 1.5;
+    color: var(--text-color);
 }
 
 /* Buttons (General) */
 button {
-  background: var(--button-bg);
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  border: none;
-  padding: 8px 12px;
-  font-size: 1.5rem;
-  text-decoration: none;
-  line-height: 1.2;
+    background: var(--button-bg);
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1.5rem;
+    text-decoration: none;
+    line-height: 1.2;
 }
 
 button:hover {
-  background: var(--button-hover-bg);
+    background: var(--button-hover-bg);
 }
 
 #cancelEditBtn {
-  background: var(--cancel-bg);
+    background: var(--cancel-bg);
 }
 
 #cancelEditBtn:hover {
-  background: var(--cancel-hover-bg);
+    background: var(--cancel-hover-bg);
 }
 
 /* Modal Styles */
 .modal {
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: var(--modal-bg);
-  display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--modal-bg);
+    display: none;
 }
 
 .modal-content {
-  background-color: var(--modal-content-bg);
-  margin: 10% auto;
-  padding: 20px;
-  border: 1px solid var(--modal-border);
-  width: 80%;
-  max-width: 500px;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px var(--modal-shadow);
+    background-color: var(--modal-content-bg);
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid var(--modal-border);
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px var(--modal-shadow);
 }
 
 .modal-content h2 {
-  margin-top: 0;
-  color: var(--heading-color);
+    margin-top: 0;
+    color: var(--heading-color);
 }
 
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
-  color: #fff;
-  text-decoration: none;
+    color: #fff;
+    text-decoration: none;
 }
 
 /* Form Elements */
 input[type="text"],
 textarea,
 select {
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  color: var(--text-color);
-  padding: 8px;
-  border-radius: 4px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    padding: 8px;
+    border-radius: 4px;
 }
 
 textarea {
-  width: 100%;
-  min-height: 150px;
-  resize: vertical;
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
 }
 
 /* 
@@ -269,20 +269,24 @@ textarea {
 */
 .button,
 .button-primary {
-  background-color: var(--button-bg) !important;
-  border: none !important;
-  border-radius: 4px !important;
-  color: #fff !important;
-  padding: 8px 12px !important;
-  text-decoration: none !important;
-  text-transform: none !important;
-  font-size: 1rem !important;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  line-height: 1.2 !important;
+    background-color: var(--button-bg) !important;
+    border: none !important;
+    border-radius: 4px !important;
+    color: #fff !important;
+    padding: 8px 12px !important;
+    text-decoration: none !important;
+    text-transform: none !important;
+    font-size: 1rem !important;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    line-height: 1.2 !important;
 }
 
 .button:hover,
 .button-primary:hover {
-  background-color: var(--button-hover-bg) !important;
+    background-color: var(--button-hover-bg) !important;
+}
+
+#langSwitch a {
+    text-decoration: none;
 }
