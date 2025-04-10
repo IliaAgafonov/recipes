@@ -467,6 +467,5 @@
         });
     }
 
-    document.addEventListener("DOMContentLoaded", renderPage);
-
+    renderPage();
 })();
