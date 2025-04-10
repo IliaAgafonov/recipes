@@ -1,6 +1,7 @@
 (function() {
 
     const translations = {
+        languageSwitch: { ru: "🇷🇺 Русский", en: "🇺🇸 English", ka: "🇬🇪 ქართული" },
         en: {
             headerTitle: "Recipes",
             formTitleAdd: "Add Recipe",
@@ -31,7 +32,6 @@
             errorParse: "Error parsing recipes data.",
             pasteExported: "Please paste the exported recipes string.",
             decompressError: "Failed to decompress recipes. Please check your input.",
-            languageSwitch: { ru: "Русский", ka: "ქართული", en: "English" }
         },
         ru: {
             headerTitle: "Рецепты",
@@ -62,8 +62,7 @@
             fieldsRequired: "Пожалуйста, заполните все поля и добавьте хотя бы один ингредиент.",
             errorParse: "Ошибка импорта рецептов.",
             pasteExported: "Пожалуйста, вставьте экспортированную строку рецептов.",
-            decompressError: "Ошибка декомпрессии рецептов. Пожалуйста, проверьте ваш ввод.",
-            languageSwitch: { ru: "Русский", ka: "ქართული", en: "English" }
+            decompressError: "Ошибка декомпрессии рецептов. Пожалуйста, проверьте ваш ввод."
         },
         ka: {
             headerTitle: "რეცეპტები",
@@ -85,17 +84,16 @@
             copyToClipboard: "კოპირება",
             exportModalTitle: "რეცეპტების ექსპორტი",
             importModalTitle: "რეცეპტების იმპორტი",
-            promptDelete: "დარწმუნებული ხართ, რომ გინდათ ეს რეცეპტის წაშლა?",
+            promptDelete: "დარწმუნებული ხართ, რომ გსურთ ამ რეცეპტის წაშლა?",
             ingredientName: "ინგრედიენტის სახელი",
             optionTasty: "გემრიელი",
-            optionNotSoGood: "არ ცუდი",
-            optionNotTried: "არ მოვცადე",
+            optionNotSoGood: "არ არის კარგი",
+            optionNotTried: "არ მიცდია",
             importPlaceholder: "ჩასვით აქ ექსპორტირებული რეცეპტების ტექსტი",
             fieldsRequired: "გთხოვთ შეავსოთ ყველა ველი და დაამატოთ მინიმუმ ერთი ინგრედიენტი.",
-            errorParse: "რეცეპტების მონაცემების გაწვდვის შეცდომა.",
+            errorParse: "რეცეპტების მონაცემების დამუშავების შეცდომა.",
             pasteExported: "გთხოვთ ჩასვით ექსპორტირებული რეცეპტების ტექსტი.",
-            decompressError: "რეცეპტების გაწვდვა ვერ მოხერხდა. გთხოვთ შეამოწმოთ თქვენი მონაცემები.",
-            languageSwitch: { ru: "Русский", en: "English", ka: "ქართული" }
+            decompressError: "რეცეპტების გახსნა ვერ მოხერხდა. გთხოვთ შეამოწმოთ შეყვანილი მონაცემები."
         }
     };
 
@@ -430,6 +428,12 @@
         }
     });
 
+    function renderPage() {
+        updateTexts();
+        updateLanguageSwitch();
+        renderRecipes();
+    }
+
     function updateTexts() {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
@@ -440,24 +444,22 @@
             const key = element.getAttribute('data-i18n-placeholder');
             element.placeholder = _(key);
         });
-        updateLanguageSwitch();
-        renderRecipes();
     }
 
     function updateLanguageSwitch() {
         const langSwitchEl = $('#langSwitch');
         if (!langSwitchEl) return;
         langSwitchEl.innerHTML = '';
-        const availableLanguages = Object.keys(translations).filter(lng => lng !== currentLanguage);
+        const availableLanguages = Object.keys(translations.languageSwitch).filter(lng => lng !== currentLanguage);
         availableLanguages.forEach((lng, index) => {
             const link = $('a');
             link.href = "#";
-            link.textContent = translations[currentLanguage].languageSwitch[lng];
+            link.textContent = translations.languageSwitch[lng];
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 currentLanguage = lng;
                 localStorage.setItem('language', currentLanguage);
-                updateTexts();
+                renderPage();
             });
             langSwitchEl.appendChild(link);
             if (index < availableLanguages.length - 1) {
@@ -466,7 +468,6 @@
         });
     }
 
-    renderRecipes();
-    document.addEventListener("DOMContentLoaded", updateTexts);
+    document.addEventListener("DOMContentLoaded", renderPage);
 
 })();
