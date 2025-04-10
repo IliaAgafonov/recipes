@@ -1,12 +1,8 @@
-// service-worker.js
-
 const CACHE_NAME = 'recipe-app-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  // include additional assets like images and fonts
+  'index.html',
+  'styles.css',
+  'script.js',
 ];
 
 // Install event - caching files for offline use
