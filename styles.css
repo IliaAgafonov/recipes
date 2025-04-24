@@ -231,6 +231,17 @@ button:hover {
     color: var(--heading-color);
 }
 
+.modal textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    padding: 8px;
+    border-radius: 4px;
+}
+
 .close {
     color: #aaa;
     float: right;

@@ -1,112 +1,5 @@
 (function() {
-
-    const translations = {
-        languageSwitch: { ru: "🇷🇺 Русский", en: "🇺🇸 English", ka: "🇬🇪 ქართული" },
-        en: {
-            headerTitle: "Recipes",
-            formTitleAdd: "Add Recipe",
-            formTitleEdit: "Edit Recipe",
-            recipeTitleLabel: "Recipe Title:",
-            recipeStatusLabel: "Recipe Status:",
-            ingredientSectionTitle: "Ingredients",
-            addIngredient: "Add Ingredient",
-            instructionsLabel: "Instructions:",
-            buttonRecipeEdit: "Edit Recipe",
-            buttonRecipeDelete: "Delete Recipe",
-            saveRecipe: "Save Recipe",
-            updateRecipe: "Update Recipe",
-            cancelEdit: "Cancel Edit",
-            savedRecipes: "Saved Recipes",
-            exportRecipes: "Export Recipes",
-            importRecipes: "Import Recipes",
-            copyToClipboard: "Copy to clipboard",
-            exportModalTitle: "Export Recipes",
-            importModalTitle: "Import Recipes",
-            promptDelete: "Are you sure you want to delete this recipe?",
-            ingredientName: "Ingredient name",
-            optionTasty: "Tasty",
-            optionNotSoGood: "Not so good",
-            optionNotTried: "Not tried",
-            importPlaceholder: "Paste your exported recipes here",
-            fieldsRequired: "Please fill in all fields and add at least one ingredient.",
-            errorParse: "Error parsing recipes data.",
-            pasteExported: "Please paste the exported recipes string.",
-            decompressError: "Failed to decompress recipes. Please check your input.",
-        },
-        ru: {
-            headerTitle: "Рецепты",
-            formTitleAdd: "Добавить рецепт",
-            formTitleEdit: "Редактировать рецепт",
-            recipeTitleLabel: "Название рецепта:",
-            recipeStatusLabel: "Статус рецепта:",
-            ingredientSectionTitle: "Ингредиенты",
-            addIngredient: "Добавить ингредиент",
-            instructionsLabel: "Инструкция:",
-            buttonRecipeEdit: "Редактировать рецепт",
-            buttonRecipeDelete: "Удалить рецепт",
-            saveRecipe: "Сохранить рецепт",
-            updateRecipe: "Обновить рецепт",
-            cancelEdit: "Отмена редактирования",
-            savedRecipes: "Сохраненные рецепты",
-            exportRecipes: "Экспорт рецептов",
-            importRecipes: "Импорт рецептов",
-            copyToClipboard: "Скопировать",
-            exportModalTitle: "Экспорт рецептов",
-            importModalTitle: "Импорт рецептов",
-            promptDelete: "Вы уверены, что хотите удалить этот рецепт?",
-            ingredientName: "Название ингредиента",
-            optionTasty: "Вкусно",
-            optionNotSoGood: "Не очень",
-            optionNotTried: "Не пробовал",
-            importPlaceholder: "Вставьте сюда строку экспорта рецептов",
-            fieldsRequired: "Пожалуйста, заполните все поля и добавьте хотя бы один ингредиент.",
-            errorParse: "Ошибка импорта рецептов.",
-            pasteExported: "Пожалуйста, вставьте экспортированную строку рецептов.",
-            decompressError: "Ошибка декомпрессии рецептов. Пожалуйста, проверьте ваш ввод."
-        },
-        ka: {
-            headerTitle: "რეცეპტები",
-            formTitleAdd: "რეცეპტის დამატება",
-            formTitleEdit: "რეცეპტის რედაქტირება",
-            recipeTitleLabel: "რეცეპტის სათაური:",
-            recipeStatusLabel: "რეცეპტის სტატუსი:",
-            ingredientSectionTitle: "ინგრედიენტები",
-            addIngredient: "ინგრედიენტის დამატება",
-            instructionsLabel: "ინსტრუქცია:",
-            buttonRecipeEdit: "რეცეპტის რედაქტირება",
-            buttonRecipeDelete: "რეცეპტის წაშლა",
-            saveRecipe: "რეცეპტის შენახვა",
-            updateRecipe: "განახლება",
-            cancelEdit: "გაუქმება",
-            savedRecipes: "შენახული რეცეპტები",
-            exportRecipes: "რეცეპტების ექსპორტი",
-            importRecipes: "რეცეპტების იმპორტი",
-            copyToClipboard: "კოპირება",
-            exportModalTitle: "რეცეპტების ექსპორტი",
-            importModalTitle: "რეცეპტების იმპორტი",
-            promptDelete: "დარწმუნებული ხართ, რომ გსურთ ამ რეცეპტის წაშლა?",
-            ingredientName: "ინგრედიენტის სახელი",
-            optionTasty: "გემრიელი",
-            optionNotSoGood: "არ არის კარგი",
-            optionNotTried: "არ მიცდია",
-            importPlaceholder: "ჩასვით აქ ექსპორტირებული რეცეპტების ტექსტი",
-            fieldsRequired: "გთხოვთ შეავსოთ ყველა ველი და დაამატოთ მინიმუმ ერთი ინგრედიენტი.",
-            errorParse: "რეცეპტების მონაცემების დამუშავების შეცდომა.",
-            pasteExported: "გთხოვთ ჩასვით ექსპორტირებული რეცეპტების ტექსტი.",
-            decompressError: "რეცეპტების გახსნა ვერ მოხერხდა. გთხოვთ შეამოწმოთ შეყვანილი მონაცემები."
-        }
-    };
-
-    let currentLanguage = localStorage.getItem('language') || 'en';
-
-    /**
-     * Returns the translated text corresponding to the key.
-     * @param {string} key - The translation key.
-     * @returns {string}
-     */
-    const _ = function(key) {
-        return translations[currentLanguage][key] || key;
-    }
+    'use strict';
 
     /**
      * Helper function for DOM manipulation.
@@ -125,6 +18,20 @@
 
     let editingIndex = null;
 
+    const ingredientsList = $('#ingredientsList');
+    const exportModal = $('#exportModal');
+    const importModal = $('#importModal');
+    const exportBtn = $('#exportBtn');
+    const importBtnShow = $('#importBtnShow');
+    const closeExportModal = $('#closeExportModal');
+    const closeImportModal = $('#closeImportModal');
+    const exportText = $('#exportText');
+    const copyExport = $('#copyExport');
+    const importText = $('#importText');
+    const importBtn = $('#importBtn');
+    const cancelEditBtn = $('#cancelEditBtn');
+    const recipeForm = $('#recipeForm');
+
     /**
      * Creates a new ingredient row element.
      * @param {string} name - The ingredient name.
@@ -136,8 +43,7 @@
 
         const input = $('input');
         input.type = 'text';
-        input.placeholder = _( "ingredientName" );
-        input.setAttribute('data-i18n-placeholder', "ingredientName");
+        input.placeholder = "Ingredient name";
         input.value = name;
         input.required = true;
 
@@ -153,9 +59,6 @@
         div.appendChild(removeBtn);
         return div;
     }
-
-    const ingredientsList = $('#ingredientsList');
-    ingredientsList.appendChild(createIngredientRow());
 
     $('#addIngredientBtn').addEventListener('click', function() {
         ingredientsList.appendChild(createIngredientRow());
@@ -186,9 +89,9 @@
         recipesList.innerHTML = '';
         const recipes = loadRecipes();
         const statusMapping = {
-            'tasty': { text: _( "optionTasty" ), class: 'status-tasty' },
-            'not-so-good': { text: _( "optionNotSoGood" ), class: 'status-not-so-good' },
-            'not-tried': { text: _( "optionNotTried" ), class: 'status-not-tried' }
+            'tasty': { text: "Tasty", class: 'status-tasty' },
+            'not-so-good': { text: "Not so good", class: 'status-not-so-good' },
+            'not-tried': { text: "Not tried", class: 'status-not-tried' }
         };
 
         recipes.forEach((recipe, index) => {
@@ -210,7 +113,7 @@
             const editBtn = $('button');
             editBtn.type = 'button';
             editBtn.textContent = '✎';
-            editBtn.title = _( "buttonRecipeEdit" );
+            editBtn.title = "Edit Recipe";
             editBtn.classList.add('edit-button');
             editBtn.addEventListener('click', function() {
                 editRecipe(index);
@@ -219,7 +122,7 @@
             const removeBtn = $('button');
             removeBtn.type = 'button';
             removeBtn.textContent = '✕';
-            removeBtn.title = _( "buttonRecipeDelete" );
+            removeBtn.title = "Delete Recipe";
             removeBtn.classList.add('remove-button');
             removeBtn.addEventListener('click', function() {
                 removeRecipe(index);
@@ -257,7 +160,7 @@
      */
     function removeRecipe(index) {
         const recipes = loadRecipes();
-        if (!confirm( _( "promptDelete" ) )) {
+        if (!confirm( "Are you sure you want to delete this recipe?" )) {
             return;
         }
         if (index >= 0 && index < recipes.length) {
@@ -284,23 +187,27 @@
             ingredientsList.appendChild(createIngredientRow(ing.name));
         });
         editingIndex = index;
-        $('#formTitle').textContent = _( "formTitleEdit" );
-        $('#submitBtn').textContent = _( "updateRecipe" );
-        $('#cancelEditBtn').style.display = 'inline-block';
+        $('#formTitle').textContent = "Edit Recipe";
+        $('#submitBtn').textContent = "Update Recipe";
+        cancelEditBtn.style.display = 'inline-block';
         window.scrollTo(0, 0);
     }
 
-    $('#cancelEditBtn').addEventListener('click', function() {
-        editingIndex = null;
-        $('#recipeForm').reset();
+    function clearRecipeForm() {
+        recipeForm.reset();
         ingredientsList.innerHTML = '';
         ingredientsList.appendChild(createIngredientRow());
-        $('#formTitle').textContent = _( "formTitleAdd" );
-        $('#submitBtn').textContent = _( "saveRecipe" );
-        $('#cancelEditBtn').style.display = 'none';
+        $('#formTitle').textContent = "Add Recipe";
+        $('#submitBtn').textContent = "Save Recipe";
+        cancelEditBtn.style.display = 'none';
+    }
+
+    cancelEditBtn.addEventListener('click', function() {
+        editingIndex = null;
+        clearRecipeForm();
     });
 
-    $('#recipeForm').addEventListener('submit', function(e) {
+    recipeForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const title = $('#recipeTitle').value.trim();
         const instructions = $('#instructions').value.trim();
@@ -314,7 +221,7 @@
             }
         });
         if (title === '' || instructions === '' || ingredients.length === 0) {
-            alert(_("fieldsRequired"));
+            alert("Please fill in all fields and add at least one ingredient.");
             return;
         }
         const recipes = loadRecipes();
@@ -325,25 +232,9 @@
             recipes.push({ title, status: recipeStatus, ingredients, instructions });
         }
         saveRecipes(recipes);
-        $('#recipeForm').reset();
-        ingredientsList.innerHTML = '';
-        ingredientsList.appendChild(createIngredientRow());
-        $('#formTitle').textContent = _( "formTitleAdd" );
-        $('#submitBtn').textContent = _( "saveRecipe" );
-        $('#cancelEditBtn').style.display = 'none';
+        clearRecipeForm();
         renderRecipes();
     });
-
-    const exportModal = $('#exportModal');
-    const importModal = $('#importModal');
-    const exportBtn = $('#exportBtn');
-    const importBtnShow = $('#importBtnShow');
-    const closeExportModal = $('#closeExportModal');
-    const closeImportModal = $('#closeImportModal');
-    const exportText = $('#exportText');
-    const copyExport = $('#copyExport');
-    const importText = $('#importText');
-    const importBtn = $('#importBtn');
 
     function openModal(modal) {
         modal.style.display = "block";
@@ -361,17 +252,19 @@
     });
 
     copyExport.addEventListener('click', function() {
-        exportText.select();
-        document.execCommand("copy");
-        copyExport.textContent = "Copied!";
-        setTimeout(() => {
-            copyExport.textContent = _( "copyToClipboard" );
-        }, 2000);
+        navigator.clipboard.writeText(exportText.value).then(() => {
+            console.log('Copied to clipboard');
+            setTimeout(() => {
+                copyExport.textContent = "Copy to clipboard";
+            }, 2000);
+        }).catch(err => {
+            console.error('Error copying to clipboard: ', err);
+        });
     });
 
     importBtnShow.addEventListener('click', function() {
         importText.value = "";
-        importText.placeholder = _( "importPlaceholder" );
+        importText.placeholder = "Paste your exported recipes here";
         openModal(importModal);
     });
 
@@ -393,12 +286,12 @@
     importBtn.addEventListener('click', function() {
         const compressed = importText.value.trim();
         if (!compressed) {
-            alert(_("pasteExported"));
+            alert("Please paste the exported recipes string.");
             return;
         }
         const decompressed = LZString.decompressFromEncodedURIComponent(compressed);
         if (!decompressed) {
-            alert(_("decompressError"));
+            alert("Failed to decompress recipes. Please check your input.");
             return;
         }
         try {
@@ -424,49 +317,10 @@
             closeModal(importModal);
             alert("Recipes imported successfully! " + newCount + " new recipe(s) added.");
         } catch (e) {
-            alert(_("errorParse"));
+            alert("Error parsing recipes data.");
         }
     });
 
-    function renderPage() {
-        window.title = _( "headerTitle" );
-        updateTexts();
-        updateLanguageSwitch();
-        renderRecipes();
-    }
-
-    function updateTexts() {
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            element.textContent = _(key);
-        });
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-            const key = element.getAttribute('data-i18n-placeholder');
-            element.placeholder = _(key);
-        });
-    }
-
-    function updateLanguageSwitch() {
-        const langSwitchEl = $('#langSwitch');
-        if (!langSwitchEl) return;
-        langSwitchEl.innerHTML = '';
-        const availableLanguages = Object.keys(translations.languageSwitch).filter(lng => lng !== currentLanguage);
-        availableLanguages.forEach((lng, index) => {
-            const link = $('a');
-            link.href = "#";
-            link.textContent = translations.languageSwitch[lng];
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                currentLanguage = lng;
-                localStorage.setItem('language', currentLanguage);
-                renderPage();
-            });
-            langSwitchEl.appendChild(link);
-            if (index < availableLanguages.length - 1) {
-                langSwitchEl.appendChild(document.createTextNode(" / "));
-            }
-        });
-    }
-
-    renderPage();
+    ingredientsList.appendChild(createIngredientRow());
+    renderRecipes();
 })();
