@@ -33,13 +33,29 @@
             <label for="recipeTitle">Recipe Title:</label><br>
             <input type="text" id="recipeTitle" name="recipeTitle" placeholder="e.g. Borzsch" required>
         </div>
-        <div>
-            <label for="recipeStatus">Recipe Status:</label><br>
-            <select id="recipeStatus" name="recipeStatus">
-                <option value="tasty">Tasty</option>
-                <option value="not-so-good">Not so good</option>
-                <option value="not-tried">Not tried</option>
-            </select>
+        <div id="tagSection">
+            <h3>Tags</h3>
+            <div>
+                <label for="tagTastiness">Tastiness:</label><br>
+                <select id="tagTastiness" name="tagTastiness">
+                    <option value="">—</option>
+                    <option value="delicious">Delicious</option>
+                    <option value="okay">Okay</option>
+                    <option value="meh">Meh</option>
+                </select>
+            </div>
+            <div>
+                <label for="tagTime">Cooking Time:</label><br>
+                <select id="tagTime" name="tagTime">
+                    <option value="">—</option>
+                    <option value="quick">Quick</option>
+                    <option value="about_hour">About an hour</option>
+                    <option value="forever">Takes forever</option>
+                </select>
+            </div>
+            <div>
+                <label><input type="checkbox" id="recipeTried" name="recipeTried"> I've tried this recipe</label>
+            </div>
         </div>
         <div id="ingredientsContainer">
             <h3>Ingredients</h3>

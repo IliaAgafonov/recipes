@@ -1,4 +1,4 @@
-const CACHE_NAME = 'recipe-app-cache-v1';
+const CACHE_NAME = 'recipe-app-cache-v0.0.1';
 const urlsToCache = [
   'index.html',
   'styles.css',

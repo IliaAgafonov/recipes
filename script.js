@@ -89,22 +89,36 @@
         recipesList.innerHTML = '';
         const recipes = loadRecipes();
         const statusMapping = {
-            'tasty': { text: "Tasty", class: 'status-tasty' },
-            'not-so-good': { text: "Not so good", class: 'status-not-so-good' },
-            'not-tried': { text: "Not tried", class: 'status-not-tried' }
+            'delicious': { text: "Delicious", class: 'green' },
+            'okay': { text: "Okay", class: 'orange' },
+            'meh': { text: "Meh", class: 'red' },
+            'quick': { text: "Quick", class: 'green' },
+            'about_hour': { text: "About an hour", class: 'orange' },
+            'forever': { text: "Takes forever", class: 'red' },
         };
 
         recipes.forEach((recipe, index) => {
             const div = $('div');
             div.classList.add('recipe');
-            if (recipe.status) {
-                const mapping = statusMapping[recipe.status] || {};
-                const statusSpan = $('span');
-                statusSpan.textContent = mapping.text || recipe.status;
-                if (mapping.class) {
-                    statusSpan.classList.add(mapping.class);
+            const tagBlock = $('div');
+            if (recipe.tags) {
+                tagBlock.style.margin = '10px 0';
+                for (const tag in recipe.tags) {
+                    const data = statusMapping[recipe.tags[tag]] || { text: recipe.tags[tag], class: 'gray' };
+                    const t = $('span');
+                    t.textContent = data.text;
+                    t.classList.add('tag', data.class);
+                    t.title = tag.charAt(0).toUpperCase() + tag.slice(1) + ': ' + data.text;
+                    tagBlock.appendChild(t);
                 }
-                div.appendChild(statusSpan);
+
+                div.appendChild(tagBlock);
+            }
+            if (recipe.tried === false) {
+                const notTried = $('span');
+                notTried.textContent = "Not tried yet";
+                notTried.classList.add('tag', 'gray');
+                tagBlock.appendChild(notTried);
             }
             const title = $('h3');
             title.textContent = recipe.title;
@@ -181,7 +195,9 @@
         const recipe = recipes[index];
         $('#recipeTitle').value = recipe.title;
         $('#instructions').value = recipe.instructions;
-        $('#recipeStatus').value = recipe.status || 'tasty';
+        $('#tagTastiness').value = recipe.tags?.tastiness || '';
+        $('#tagTime').value = recipe.tags?.time || '';
+        $('#recipeTried').checked = recipe.tried !== false;
         ingredientsList.innerHTML = '';
         recipe.ingredients.forEach(ing => {
             ingredientsList.appendChild(createIngredientRow(ing.name));
@@ -211,7 +227,12 @@
         e.preventDefault();
         const title = $('#recipeTitle').value.trim();
         const instructions = $('#instructions').value.trim();
-        const recipeStatus = $('#recipeStatus').value;
+        const tags = {};
+        const tastiness = $('#tagTastiness').value;
+        const time = $('#tagTime').value;
+        if (tastiness) tags.tastiness = tastiness;
+        if (time) tags.time = time;
+        const tried = $('#recipeTried').checked;
         const ingredientDivs = document.querySelectorAll('#ingredientsList .ingredient');
         const ingredients = [];
         ingredientDivs.forEach(div => {
@@ -225,11 +246,12 @@
             return;
         }
         const recipes = loadRecipes();
+        const newRecipe = { title, ingredients, instructions, tags, tried };
         if (editingIndex !== null) {
-            recipes[editingIndex] = { title, status: recipeStatus, ingredients, instructions };
+            recipes[editingIndex] = newRecipe;
             editingIndex = null;
         } else {
-            recipes.push({ title, status: recipeStatus, ingredients, instructions });
+            recipes.push(newRecipe);
         }
         saveRecipes(recipes);
         clearRecipeForm();

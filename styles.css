@@ -123,29 +123,32 @@ h1, h2 {
     color: var(--heading-color);
 }
 
-/* Status Labels */
-.status-tasty {
+/* Tags Labels */
+.tag {
+    padding: 3px 8px;
+    margin-left: 10px;
+    border-radius: 3px;
+}
+
+.tag.green {
     background-color: #088e41;
     color: #fff;
-    padding: 3px 8px;
-    margin-left: 10px;
-    border-radius: 3px;
 }
 
-.status-not-so-good {
+.tag.orange {
     background-color: #e67e22;
     color: #fff;
-    padding: 3px 8px;
-    margin-left: 10px;
-    border-radius: 3px;
 }
 
-.status-not-tried {
+.tag.red {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.tag.gray {
     background-color: #7f8c8d;
     color: #fff;
-    padding: 3px 8px;
-    margin-left: 10px;
-    border-radius: 3px;
+    font-style: italic;
 }
 
 /* Edit Button (within recipes) */
