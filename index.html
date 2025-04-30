@@ -35,23 +35,25 @@
         </div>
         <div id="tagSection">
             <h3>Tags</h3>
-            <div>
-                <label for="tagTastiness">Tastiness:</label><br>
-                <select id="tagTastiness" name="tagTastiness">
-                    <option value="">—</option>
-                    <option value="delicious">Delicious</option>
-                    <option value="okay">Okay</option>
-                    <option value="meh">Meh</option>
-                </select>
-            </div>
-            <div>
-                <label for="tagTime">Cooking Time:</label><br>
-                <select id="tagTime" name="tagTime">
-                    <option value="">—</option>
-                    <option value="quick">Quick</option>
-                    <option value="about_hour">About an hour</option>
-                    <option value="forever">Takes forever</option>
-                </select>
+            <div class="row">
+                <div class="column one-half">
+                    <label for="tagTastiness">Tastiness:</label><br>
+                    <select id="tagTastiness" name="tagTastiness">
+                        <option value="">—</option>
+                        <option value="delicious">Delicious</option>
+                        <option value="okay">Okay</option>
+                        <option value="meh">Meh</option>
+                    </select>
+                </div>
+                <div class="column one-half">
+                    <label for="tagTime">Cooking Time:</label><br>
+                    <select id="tagTime" name="tagTime">
+                        <option value="">—</option>
+                        <option value="quick">Quick</option>
+                        <option value="about_hour">About an hour</option>
+                        <option value="forever">Takes forever</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <label><input type="checkbox" id="recipeTried" name="recipeTried"> I've tried this recipe</label>

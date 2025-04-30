@@ -61,16 +61,41 @@ h1, h2 {
 }
 
 /* Ingredients Section */
+#ingredientsList {
+    padding-bottom: 10px;
+}
+
 .ingredient {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+}
+
+.ingredient.dragging {
+    opacity: 0.5;
+}
+
+.drag-handle {
+    cursor: grab;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.drag-handle svg {
+    display: block;
+    stroke: #aaa;
+    transition: stroke 0.2s;
+}
+
+.drag-handle:hover svg {
+    stroke: #fff;
 }
 
 .ingredient input[type="text"],
 .ingredient select {
     flex: 1;
-    margin-right: 10px;
+    margin: 0 10px;
     background: var(--input-bg);
     border: 1px solid var(--input-border);
     color: var(--text-color);

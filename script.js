@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     /**
@@ -41,6 +41,20 @@
         const div = $('div');
         div.classList.add('ingredient');
 
+        const handle = $('div');
+        handle.classList.add('drag-handle');
+        handle.setAttribute('draggable', 'true');
+        handle.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="5" cy="5" r="1.5"/>
+              <circle cx="5" cy="12" r="1.5"/>
+              <circle cx="5" cy="19" r="1.5"/>
+              <circle cx="12" cy="5" r="1.5"/>
+              <circle cx="12" cy="12" r="1.5"/>
+              <circle cx="12" cy="19" r="1.5"/>
+            </svg>
+        `;
+
         const input = $('input');
         input.type = 'text';
         input.placeholder = "Ingredient name";
@@ -51,16 +65,77 @@
         removeBtn.type = 'button';
         removeBtn.textContent = '✕';
         removeBtn.classList.add('remove-ingredient');
-        removeBtn.addEventListener('click', function() {
-            div.remove();
-        });
+        removeBtn.addEventListener('click', () => div.remove());
 
+        div.appendChild(handle);
         div.appendChild(input);
         div.appendChild(removeBtn);
+
+        handle.addEventListener('dragstart', (e) => {
+            div.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', '');
+        });
+
+        handle.addEventListener('dragend', () => {
+            div.classList.remove('dragging');
+        });
+
+        handle.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            div.classList.add('dragging');
+            const move = (ev) => {
+                const after = getDragAfterElement(ingredientsList, ev.touches[0].clientY);
+                if (after == null) {
+                    ingredientsList.appendChild(div);
+                } else {
+                    ingredientsList.insertBefore(div, after);
+                }
+            };
+            const end = () => {
+                div.classList.remove('dragging');
+                document.removeEventListener('touchmove', move);
+                document.removeEventListener('touchend', end);
+            };
+            document.addEventListener('touchmove', move);
+            document.addEventListener('touchend', end);
+        });
+
+        div.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const dragging = document.querySelector('.ingredient.dragging');
+            const after = getDragAfterElement(ingredientsList, e.clientY);
+            if (after == null) {
+                ingredientsList.appendChild(dragging);
+            } else {
+                ingredientsList.insertBefore(dragging, after);
+            }
+        });
+
         return div;
     }
 
-    $('#addIngredientBtn').addEventListener('click', function() {
+
+    /**
+     * Gets the element after which the dragged element should be placed.
+     * @param {HTMLElement} container
+     * @param {number} y
+     * @returns {HTMLElement|null}
+     */
+    function getDragAfterElement(container, y) {
+        const elements = [...container.querySelectorAll('.ingredient:not(.dragging)')];
+        return elements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return {offset: offset, element: child};
+            } else {
+                return closest;
+            }
+        }, {offset: -Infinity}).element;
+    }
+
+
+    $('#addIngredientBtn').addEventListener('click', function () {
         ingredientsList.appendChild(createIngredientRow());
     });
 
@@ -89,12 +164,12 @@
         recipesList.innerHTML = '';
         const recipes = loadRecipes();
         const statusMapping = {
-            'delicious': { text: "Delicious", class: 'green' },
-            'okay': { text: "Okay", class: 'orange' },
-            'meh': { text: "Meh", class: 'red' },
-            'quick': { text: "Quick", class: 'green' },
-            'about_hour': { text: "About an hour", class: 'orange' },
-            'forever': { text: "Takes forever", class: 'red' },
+            'delicious': {text: "Delicious", class: 'green'},
+            'okay': {text: "Okay", class: 'orange'},
+            'meh': {text: "Meh", class: 'red'},
+            'quick': {text: "Quick", class: 'green'},
+            'about_hour': {text: "About an hour", class: 'orange'},
+            'forever': {text: "Takes forever", class: 'red'},
         };
 
         recipes.forEach((recipe, index) => {
@@ -104,7 +179,7 @@
             if (recipe.tags) {
                 tagBlock.style.margin = '10px 0';
                 for (const tag in recipe.tags) {
-                    const data = statusMapping[recipe.tags[tag]] || { text: recipe.tags[tag], class: 'gray' };
+                    const data = statusMapping[recipe.tags[tag]] || {text: recipe.tags[tag], class: 'gray'};
                     const t = $('span');
                     t.textContent = data.text;
                     t.classList.add('tag', data.class);
@@ -129,7 +204,7 @@
             editBtn.textContent = '✎';
             editBtn.title = "Edit Recipe";
             editBtn.classList.add('edit-button');
-            editBtn.addEventListener('click', function() {
+            editBtn.addEventListener('click', function () {
                 editRecipe(index);
             });
             div.appendChild(editBtn);
@@ -138,7 +213,7 @@
             removeBtn.textContent = '✕';
             removeBtn.title = "Delete Recipe";
             removeBtn.classList.add('remove-button');
-            removeBtn.addEventListener('click', function() {
+            removeBtn.addEventListener('click', function () {
                 removeRecipe(index);
             });
             div.appendChild(removeBtn);
@@ -174,7 +249,7 @@
      */
     function removeRecipe(index) {
         const recipes = loadRecipes();
-        if (!confirm( "Are you sure you want to delete this recipe?" )) {
+        if (!confirm("Are you sure you want to delete this recipe?")) {
             return;
         }
         if (index >= 0 && index < recipes.length) {
@@ -218,12 +293,12 @@
         cancelEditBtn.style.display = 'none';
     }
 
-    cancelEditBtn.addEventListener('click', function() {
+    cancelEditBtn.addEventListener('click', function () {
         editingIndex = null;
         clearRecipeForm();
     });
 
-    recipeForm.addEventListener('submit', function(e) {
+    recipeForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const title = $('#recipeTitle').value.trim();
         const instructions = $('#instructions').value.trim();
@@ -238,7 +313,7 @@
         ingredientDivs.forEach(div => {
             const name = div.querySelector('input[type="text"]').value.trim();
             if (name !== '') {
-                ingredients.push({ name });
+                ingredients.push({name});
             }
         });
         if (title === '' || instructions === '' || ingredients.length === 0) {
@@ -246,7 +321,7 @@
             return;
         }
         const recipes = loadRecipes();
-        const newRecipe = { title, ingredients, instructions, tags, tried };
+        const newRecipe = {title, ingredients, instructions, tags, tried};
         if (editingIndex !== null) {
             recipes[editingIndex] = newRecipe;
             editingIndex = null;
@@ -261,11 +336,12 @@
     function openModal(modal) {
         modal.style.display = "block";
     }
+
     function closeModal(modal) {
         modal.style.display = "none";
     }
 
-    exportBtn.addEventListener('click', function() {
+    exportBtn.addEventListener('click', function () {
         const recipes = loadRecipes();
         const jsonStr = JSON.stringify(recipes);
         const compressed = LZString.compressToEncodedURIComponent(jsonStr);
@@ -273,7 +349,7 @@
         openModal(exportModal);
     });
 
-    copyExport.addEventListener('click', function() {
+    copyExport.addEventListener('click', function () {
         navigator.clipboard.writeText(exportText.value).then(() => {
             console.log('Copied to clipboard');
             setTimeout(() => {
@@ -284,20 +360,20 @@
         });
     });
 
-    importBtnShow.addEventListener('click', function() {
+    importBtnShow.addEventListener('click', function () {
         importText.value = "";
         importText.placeholder = "Paste your exported recipes here";
         openModal(importModal);
     });
 
-    closeExportModal.addEventListener('click', function() {
+    closeExportModal.addEventListener('click', function () {
         closeModal(exportModal);
     });
-    closeImportModal.addEventListener('click', function() {
+    closeImportModal.addEventListener('click', function () {
         closeModal(importModal);
     });
 
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', function (event) {
         if (event.target === exportModal) {
             closeModal(exportModal);
         } else if (event.target === importModal) {
@@ -305,7 +381,7 @@
         }
     });
 
-    importBtn.addEventListener('click', function() {
+    importBtn.addEventListener('click', function () {
         const compressed = importText.value.trim();
         if (!compressed) {
             alert("Please paste the exported recipes string.");
@@ -320,13 +396,15 @@
             const importedRecipes = JSON.parse(decompressed);
             const currentRecipes = loadRecipes();
             let newCount = 0;
+
             function recipesEqual(r1, r2) {
                 return r1.title === r2.title &&
                     r1.instructions === r2.instructions &&
                     JSON.stringify(r1.ingredients) === JSON.stringify(r2.ingredients);
             }
-            importedRecipes.forEach(function(newRecipe) {
-                const duplicateFound = currentRecipes.some(function(existingRecipe) {
+
+            importedRecipes.forEach(function (newRecipe) {
+                const duplicateFound = currentRecipes.some(function (existingRecipe) {
                     return recipesEqual(existingRecipe, newRecipe);
                 });
                 if (!duplicateFound) {
