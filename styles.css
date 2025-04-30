@@ -45,14 +45,24 @@ h1, h2 {
 /* Recipe Form Section */
 #recipeFormSection {
     background: var(--section-bg);
-    padding: 20px;
     border-radius: 4px;
     box-shadow: 0 2px 4px var(--modal-shadow);
     margin-bottom: 30px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+}
+
+#recipeFormSection.open {
+    max-height: 1000px; /* large enough to fit content */
+}
+
+#formTitle {
+    margin: 20px;
 }
 
 #recipeForm {
-    margin: 0;
+    margin: 20px;
 }
 
 #recipeForm label {

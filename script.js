@@ -30,7 +30,9 @@
     const importText = $('#importText');
     const importBtn = $('#importBtn');
     const cancelEditBtn = $('#cancelEditBtn');
+    const recipeFormSection = $('#recipeFormSection');
     const recipeForm = $('#recipeForm');
+    const newRecipeBtn = $('#newRecipeBtn');
 
     /**
      * Creates a new ingredient row element.
@@ -281,6 +283,7 @@
         $('#formTitle').textContent = "Edit Recipe";
         $('#submitBtn').textContent = "Update Recipe";
         cancelEditBtn.style.display = 'inline-block';
+        recipeFormSection.classList.add('open');
         window.scrollTo(0, 0);
     }
 
@@ -295,7 +298,7 @@
 
     cancelEditBtn.addEventListener('click', function () {
         editingIndex = null;
-        clearRecipeForm();
+        recipeFormSection.classList.remove('open');
     });
 
     recipeForm.addEventListener('submit', function (e) {
@@ -330,6 +333,7 @@
         }
         saveRecipes(recipes);
         clearRecipeForm();
+        recipeFormSection.classList.remove('open');
         renderRecipes();
     });
 
@@ -419,6 +423,12 @@
         } catch (e) {
             alert("Error parsing recipes data.");
         }
+    });
+
+    newRecipeBtn.addEventListener('click', () => {
+        recipeFormSection.classList.add('open');
+        clearRecipeForm()
+        window.scrollTo(0, 0);
     });
 
     ingredientsList.appendChild(createIngredientRow());
